@@ -1,10 +1,21 @@
 import { RouteConfig } from 'vue-router';
 
 const routes: RouteConfig[] = [
+  // {
+  //   path: '/en',
+  //   redirect: '/'
+  // },
   {
-    path: '/',
+    path: '/:lang?',
     component: () => import('layouts/MainLayout.vue'),
-    children: [{ path: '', component: () => import('pages/Index.vue') }]
+    children: [
+      { path: '', name: 'index', component: () => import('pages/Index.vue') },
+      {
+        path: 'about',
+        name: 'about',
+        component: () => import('pages/About.vue')
+      }
+    ]
   }
 ];
 

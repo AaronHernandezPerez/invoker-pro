@@ -1,6 +1,4 @@
-import { get, fill } from 'lodash-es';
-
-class Stack {
+export default class Stack {
   // FILO stack
 
   maxElements: number;
@@ -12,13 +10,12 @@ class Stack {
   }
 
   unshift(e: string) {
-    this.data.unshift(e)
+    this.data.unshift(e);
 
     if (this.data.length > this.maxElements) {
-      this.data.slice(0, this.maxElements)
+      this.data.slice(0, this.maxElements);
     }
   }
-
 
   // Invoker custom methods
   /**
@@ -41,5 +38,4 @@ class Stack {
 
     return equal;
   }
-
 }

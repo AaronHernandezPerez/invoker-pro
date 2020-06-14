@@ -5,14 +5,7 @@
 </template>
 
 <script lang="ts">
-import { get, fill } from "lodash-es"
-
 export default {
-  name: 'App',
-  mounted() {
-    const xd:Array<string>  = []
-    fill( xd ,'xdfd',10)
-    console.log(xd)
-  }
-}
+  name: 'App'
+};
 </script>

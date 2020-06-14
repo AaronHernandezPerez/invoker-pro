@@ -2,9 +2,7 @@
   <div>
     <p>{{ title }}</p>
     <ul>
-      <li v-for="todo in todos" :key="todo.id" @click="increment">
-        {{ todo.id }} - {{ todo.content }}
-      </li>
+      <li v-for="todo in todos" :key="todo.id" @click="increment">{{ todo.id }} - {{ todo.content }}</li>
     </ul>
     <p>Count: {{ todoCount }} / {{ meta.totalCount }}</p>
     <p>Active: {{ active ? 'yes' : 'no' }}</p>
@@ -14,12 +12,12 @@
 
 <script lang="ts">
 import { defineComponent, PropType, computed, ref } from '@vue/composition-api';
-import { Todo, Meta } from './models';
+import { Todo, Meta } from 'components/composition/models';
 
 function useClickCount() {
   const clickCount = ref(0);
   function increment() {
-    clickCount.value += 1
+    clickCount.value += 1;
     return clickCount.value;
   }
 

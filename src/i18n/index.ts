@@ -1,5 +1,7 @@
-import enUS from './en-us';
+import enUS from './en-us.json';
+import esEs from './es-es.json';
 
 export default {
-  'en-us': enUS
+  en: enUS,
+  es: esEs
 };
