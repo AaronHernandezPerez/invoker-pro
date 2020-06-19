@@ -63,14 +63,11 @@ export default Vue.extend({
     selectedCountry(newV) {
       changeLanguage(newV.value);
       const route = this.$route;
-      // if (route.params.lang) {
-      //   route.params.lang = newV.value;
-      // }
+
       let lang = newV.value;
       if (route.name === 'index' && newV.value === defaultLanguage) {
         lang = '';
       }
-      console.log(route);
 
       this.$router
         // @ts-ignore
