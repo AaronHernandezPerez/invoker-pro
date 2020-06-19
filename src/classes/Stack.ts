@@ -13,7 +13,7 @@ export default class Stack {
     this.data.unshift(e);
 
     if (this.data.length > this.maxElements) {
-      this.data.slice(0, this.maxElements);
+      this.data.pop();
     }
   }
 
@@ -21,9 +21,12 @@ export default class Stack {
   /**
    * @param o Object like {q:1,w:1,e:1} or {q:3}
    */
-  equals(o: { [index: string]: number }): boolean {
-    let equal = true;
+  equals(o: null | { [index: string]: number }): boolean {
+    if (!o) {
+      return false;
+    }
 
+    let equal = true;
     for (const key in o) {
       if (o.hasOwnProperty(key)) {
         const value: number = o[key];
