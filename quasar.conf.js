@@ -124,7 +124,7 @@ module.exports = configure(function(ctx) {
       directives: [],
 
       // Quasar plugins
-      plugins: [],
+      plugins: ['LocalStorage'],
 
       config: {
         dark: true // or Boolean true/false

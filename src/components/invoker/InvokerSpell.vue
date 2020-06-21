@@ -41,6 +41,7 @@ export default Vue.extend({
 <style lang="scss" scoped>
 // Topleft white
 img.inv-icon {
+  width: 100%;
   border-style: outset;
   border-top: outset rgba(255, 255, 255, 0.3);
   border-left: outset rgba(255, 255, 255, 0.3);
