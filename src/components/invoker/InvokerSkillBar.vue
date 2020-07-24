@@ -3,10 +3,9 @@
     <div class="col flex justify-center items-center">
       <div class="primary-spells">
         <InvokerSpell class="full-width" :spell="InvokerPrimarySpells['q']" />
-
         <ReplaceInput
           v-model="InvokerPrimarySpells['q'].keybind"
-          @input="saveKeybind(InvokerPrimarySpells['q'].keybind,'q',$refs.w)"
+          @input="saveKeybind(InvokerPrimarySpells['q'].keybind, 'q', $refs.w)"
         />
       </div>
     </div>
@@ -16,7 +15,7 @@
         <ReplaceInput
           ref="w"
           v-model="InvokerPrimarySpells['w'].keybind"
-          @input="saveKeybind(InvokerPrimarySpells['w'].keybind,'w',$refs.e)"
+          @input="saveKeybind(InvokerPrimarySpells['w'].keybind, 'w', $refs.e)"
         />
       </div>
     </div>
@@ -26,17 +25,23 @@
         <ReplaceInput
           ref="e"
           v-model="InvokerPrimarySpells['e'].keybind"
-          @input="saveKeybind(InvokerPrimarySpells['e'].keybind,'e',$refs.r)"
+          @input="saveKeybind(InvokerPrimarySpells['e'].keybind, 'e', $refs.r)"
         />
       </div>
     </div>
-    <div class="col flex justify-center items-center">
+    <div class="col flex justify-center items-start">
+      <InvokerSpell class="full-width" :spell="{}" />
+    </div>
+    <div class="col flex justify-center items-start">
+      <InvokerSpell class="full-width" :spell="{}" />
+    </div>
+    <div class="col flex justify-center items-center q-mr-sm">
       <div class="primary-spells">
         <InvokerSpell class="full-width" :spell="InvokerPrimarySpells['r']" />
         <ReplaceInput
           ref="r"
           v-model="InvokerPrimarySpells['r'].keybind"
-          @input="saveKeybind(InvokerPrimarySpells['r'].keybind,'r')"
+          @input="saveKeybind(InvokerPrimarySpells['r'].keybind, 'r')"
         />
       </div>
     </div>
@@ -47,8 +52,6 @@
 import Vue from 'vue';
 import InvokerSpell from 'components/invoker/InvokerSpell.vue';
 import ReplaceInput from 'components/ReplaceInput.vue';
-
-import { find } from 'lodash-es';
 
 export default Vue.extend({
   name: '',
@@ -68,22 +71,20 @@ export default Vue.extend({
       keybind: string,
       next: { focus: Function } | undefined
     ) {
-      const keybindings = this.$q.localStorage.getItem('keybindings');
-      // @ts-ignore
+      const keybindings = this.$q.localStorage.getItem('keybindings') as {
+        [index: string]: string;
+      };
+
       for (const key in keybindings) {
         if (keybindings.hasOwnProperty(key)) {
-          // @ts-ignore
           const element = keybindings[key];
           if (element === value && keybind !== key) {
-            // debugger;
-            // @ts-ignore
             keybindings[key] = '';
             this.InvokerPrimarySpells[key].keybind = '';
           }
         }
       }
 
-      // @ts-ignore
       keybindings[keybind] = value;
       this.$q.localStorage.set('keybindings', keybindings);
       if (next) {
@@ -97,5 +98,4 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>

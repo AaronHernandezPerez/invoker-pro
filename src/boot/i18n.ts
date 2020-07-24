@@ -21,7 +21,6 @@ declare module 'vue/types/vue' {
 
 Vue.use(VueI18n);
 
-// @ts-ignore
 // const quasarTotalLanguages = QUASAR_SUPPORTED_LANGUAGES; // Data given from webpack
 const supportedLanguages: { [index: string]: { [index: string]: string } } = {
   en: { quasarLang: 'en-us', name: 'English' },

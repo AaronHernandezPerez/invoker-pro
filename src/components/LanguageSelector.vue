@@ -32,6 +32,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
+import { RawLocation } from 'vue-router';
 
 import { changeLanguage, defaultLanguage } from 'boot/i18n';
 import CountryFlag from 'vue-country-flag';
@@ -69,10 +70,13 @@ export default Vue.extend({
         lang = '';
       }
 
-      this.$router
-        // @ts-ignore
-        .replace({ name: route.name, params: { lang: lang } })
-        .catch();
+      if (route.name) {
+        const newRoute: RawLocation = {
+          name: route.name,
+          params: { lang: lang }
+        };
+        this.$router.replace(newRoute).catch();
+      }
     }
   }
 });

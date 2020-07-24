@@ -4,7 +4,7 @@
     input-class="text-center"
     maxlength="1"
     v-model="displayValue"
-    @focus="displayValue=''"
+    @focus="initFocusValues()"
     @blur="restoreValue()"
     dense
   />
@@ -23,21 +23,30 @@ export default Vue.extend({
   },
   data() {
     return {
-      displayValue: this.value
+      displayValue: this.value,
+      focused: false
     };
   },
   watch: {
-    displayValue(newV, oldV) {
+    displayValue(newV) {
       if (newV) {
         this.$emit('input', newV);
       }
+    },
+    value(newV) {
+      this.displayValue = newV;
     }
   },
   methods: {
     restoreValue() {
-      if (!this.displayValue) {
+      if (!this.displayValue && this.focused) {
         this.displayValue = this.value;
+        this.focused = false;
       }
+    },
+    initFocusValues() {
+      this.displayValue = '';
+      this.focused = true;
     },
     focus() {
       // @ts-ignore

@@ -24,13 +24,13 @@
     </div>
     <div class="col-12 col-sm">
       <div class="row">
-        <div class="col">Played: {{playedTotal}}</div>
+        <div class="col">Played: {{ playedTotal }}</div>
       </div>
       <div class="row">
-        <div class="col">Points: {{playedSuccessful}}</div>
+        <div class="col">Points: {{ playedSuccessful }}</div>
       </div>
       <div class="row">
-        <div class="col">Failed: {{playedFailed}}</div>
+        <div class="col">Failed: {{ playedFailed }}</div>
       </div>
       <div>
         Sound volume
@@ -58,6 +58,8 @@ if (!LocalStorage.getItem('keybindings')) {
   LocalStorage.set('keybindings', { q: 'q', w: 'w', e: 'e', r: 'r' });
 }
 
+type SpellObject = { name: string } | null;
+
 export default Vue.extend({
   name: 'InvokerGame',
   components: {
@@ -66,6 +68,13 @@ export default Vue.extend({
     InvokerSkillBar
   },
   data() {
+    const keybindings = this.$q.localStorage.getItem('keybindings') as {
+      q: string;
+      w: string;
+      e: string;
+      r: string;
+    };
+
     const InvokerPrimarySpells: {
       [index: string]: {
         value: string;
@@ -79,8 +88,7 @@ export default Vue.extend({
     } = {
       q: {
         value: 'q',
-        // @ts-ignore
-        keybind: this.$q.localStorage.getItem('keybindings').q,
+        keybind: keybindings.q,
         name: 'Quas',
         icon: require('src/statics/icons/invoker/Quas_icon.png'),
         icon2x: require('src/statics/icons/invoker/Quas_icon_2x.png'),
@@ -89,8 +97,7 @@ export default Vue.extend({
       },
       w: {
         value: 'w',
-        // @ts-ignore
-        keybind: this.$q.localStorage.getItem('keybindings').w,
+        keybind: keybindings.w,
         name: 'Wex',
         icon: require('src/statics/icons/invoker/Wex_icon.png'),
         icon2x: require('src/statics/icons/invoker/Wex_icon_2x.png'),
@@ -99,8 +106,7 @@ export default Vue.extend({
       },
       e: {
         value: 'e',
-        // @ts-ignore
-        keybind: this.$q.localStorage.getItem('keybindings').e,
+        keybind: keybindings.e,
         name: 'Exort',
         icon: require('src/statics/icons/invoker/Exort_icon.png'),
         icon2x: require('src/statics/icons/invoker/Exort_icon_2x.png'),
@@ -109,8 +115,7 @@ export default Vue.extend({
       },
       r: {
         value: 'r',
-        // @ts-ignore
-        keybind: this.$q.localStorage.getItem('keybindings').r,
+        keybind: keybindings.r,
         name: 'Invoke',
         icon: require('src/statics/icons/invoker/Invoke_icon.png'),
         icon2x: require('src/statics/icons/invoker/Invoke_icon_2x.png'),
@@ -211,8 +216,6 @@ export default Vue.extend({
       }
     };
 
-    const randomSpell: object | null = null;
-
     const spellStack = new Stack();
 
     const playedTotal = 0;
@@ -226,7 +229,7 @@ export default Vue.extend({
     return {
       InvokerPrimarySpells,
       InvokerSpells,
-      randomSpell,
+      randomSpell: null as SpellObject,
       spellStack,
       playedTotal,
       playedSuccessful,
@@ -273,6 +276,7 @@ export default Vue.extend({
         // Use ability / check if is the one show
         // @ts-ignore
         if (this.spellStack.equals(this.randomSpell.combination)) {
+          // @ts-ignore
           this.randomSpell = this.selectRandomSpell(this.randomSpell);
           this.playAudio('success');
           this.playedSuccessful++;
@@ -297,7 +301,7 @@ export default Vue.extend({
         }
       }
     },
-    selectRandomSpell(currentSpell: { name: string }): object {
+    selectRandomSpell(currentSpell: SpellObject): SpellObject {
       this.playedTotal++;
       const keys: string[] = Object.keys(this.InvokerSpells);
       let randomKey: string;
