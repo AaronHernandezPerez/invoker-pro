@@ -1,17 +1,28 @@
-export const InvokerPrimarySpells: {
-  [index: string]: {
-    value: string;
-    keybind: string;
-    name: string;
-    icon: object;
-    icon2x: object;
-    icon4x: object;
-    icon6x: object;
-  };
-} = {
+type Keybinds = {
+  q: string;
+  w: string;
+  e: string;
+  r: string;
+};
+
+export type PrimarySpellType = {
+  value: string;
+  keybind: string | null;
+  name: string;
+  icon: object;
+  icon2x: object;
+  icon4x: object;
+  icon6x: object;
+}
+
+export type InvokerPrimarySpellType = {
+  [index in keyof Keybinds]: PrimarySpellType;
+};
+
+export const InvokerPrimarySpells: InvokerPrimarySpellType = {
   q: {
     value: 'q',
-    keybind: keybindings.q,
+    keybind: null,
     name: 'Quas',
     icon: require('src/statics/icons/invoker/Quas_icon.png'),
     icon2x: require('src/statics/icons/invoker/Quas_icon_2x.png'),
@@ -20,7 +31,7 @@ export const InvokerPrimarySpells: {
   },
   w: {
     value: 'w',
-    keybind: keybindings.w,
+    keybind: null,
     name: 'Wex',
     icon: require('src/statics/icons/invoker/Wex_icon.png'),
     icon2x: require('src/statics/icons/invoker/Wex_icon_2x.png'),
@@ -29,7 +40,7 @@ export const InvokerPrimarySpells: {
   },
   e: {
     value: 'e',
-    keybind: keybindings.e,
+    keybind: null,
     name: 'Exort',
     icon: require('src/statics/icons/invoker/Exort_icon.png'),
     icon2x: require('src/statics/icons/invoker/Exort_icon_2x.png'),
@@ -38,7 +49,7 @@ export const InvokerPrimarySpells: {
   },
   r: {
     value: 'r',
-    keybind: keybindings.r,
+    keybind: null,
     name: 'Invoke',
     icon: require('src/statics/icons/invoker/Invoke_icon.png'),
     icon2x: require('src/statics/icons/invoker/Invoke_icon_2x.png'),
@@ -47,16 +58,21 @@ export const InvokerPrimarySpells: {
   }
 };
 
-export const InvokerSpells: {
-  [index: string]: {
-    name: string;
-    combination: object;
-    icon: object;
-    icon2x: object;
-    icon4x: object;
-    icon6x: object;
-  };
-} = {
+export type CombinedSpellType = {
+  name: string;
+  combination: { [index: string]: number };
+  icon: object;
+  icon2x: object;
+  icon4x: object;
+  icon6x: object;
+}
+
+export type InvokerCombinedSpellType = {
+  [index: string]: CombinedSpellType;
+};
+
+
+export const InvokerCombinedSpells: InvokerCombinedSpellType = {
   coldSnap: {
     name: 'Cold Snap',
     combination: { q: 3 },

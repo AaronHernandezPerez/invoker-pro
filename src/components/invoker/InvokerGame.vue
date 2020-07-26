@@ -1,8 +1,12 @@
 <template>
   <div class="row q-col-gutter-lg">
     <div class="col-12 col-sm">
-      <InvokerGuide :InvokerSpells="InvokerSpells" :InvokerPrimarySpells="InvokerPrimarySpells" />
+      <InvokerGuide
+        :InvokerCombinedSpells="InvokerCombinedSpells"
+        :InvokerPrimarySpells="InvokerPrimarySpells"
+      />
     </div>
+
     <div class="col-12 col-sm last-sm">
       <div class="column justify-between full-height">
         <div class="flex justify-center">
@@ -10,18 +14,24 @@
         </div>
 
         <div class="q-my-xl row no-wrap reverse justify-around q-gutter-md">
-          <div
-            class="row no-wrap reverse q-gutter-md"
-            v-for="(value, key) in spellStack.data"
-            :key="key"
-          >
-            <InvokerSpell :spell="InvokerPrimarySpells[value]" />
+          <div class="row no-wrap reverse q-gutter-md">
+            <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[0]]" border="round" />
+          </div>
+          <div class="row no-wrap reverse q-gutter-md">
+            <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[1]]" border="round" />
+          </div>
+          <div class="row no-wrap reverse q-gutter-md">
+            <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[2]]" border="round" />
           </div>
         </div>
 
-        <InvokerSkillBar :InvokerPrimarySpells="InvokerPrimarySpells" />
+        <InvokerSkillBar
+          :InvokerPrimarySpells="InvokerPrimarySpells"
+          :usedSpellStack="usedSpellStack"
+        />
       </div>
     </div>
+
     <div class="col-12 col-sm">
       <div class="row">
         <div class="col">Played: {{ playedTotal }}</div>
@@ -54,200 +64,67 @@ import Stack from 'src/classes/Stack';
 // Settings neccesary localstorage data
 import { LocalStorage } from 'quasar';
 
+type KeybindsType = {
+  q: string;
+  w: string;
+  e: string;
+  r: string;
+};
+
 if (!LocalStorage.getItem('keybindings')) {
   LocalStorage.set('keybindings', { q: 'q', w: 'w', e: 'e', r: 'r' });
 }
 
 type SpellObject = { name: string } | null;
 
+import {
+  InvokerPrimarySpellType,
+  InvokerPrimarySpells,
+  InvokerCombinedSpells,
+  CombinedSpellType,
+  InvokerCombinedSpellType,
+} from 'components/invoker/Spells';
+
 export default Vue.extend({
   name: 'InvokerGame',
   components: {
     InvokerSpell,
     InvokerGuide,
-    InvokerSkillBar
+    InvokerSkillBar,
   },
   data() {
-    const keybindings = this.$q.localStorage.getItem('keybindings') as {
-      q: string;
-      w: string;
-      e: string;
-      r: string;
-    };
+    const keybindings = this.$q.localStorage.getItem(
+      'keybindings'
+    ) as KeybindsType;
 
-    const InvokerPrimarySpells: {
-      [index: string]: {
-        value: string;
-        keybind: string;
-        name: string;
-        icon: object;
-        icon2x: object;
-        icon4x: object;
-        icon6x: object;
-      };
-    } = {
-      q: {
-        value: 'q',
-        keybind: keybindings.q,
-        name: 'Quas',
-        icon: require('src/statics/icons/invoker/Quas_icon.png'),
-        icon2x: require('src/statics/icons/invoker/Quas_icon_2x.png'),
-        icon4x: require('src/statics/icons/invoker/Quas_icon_4x.png'),
-        icon6x: require('src/statics/icons/invoker/Quas_icon_6x.png')
-      },
-      w: {
-        value: 'w',
-        keybind: keybindings.w,
-        name: 'Wex',
-        icon: require('src/statics/icons/invoker/Wex_icon.png'),
-        icon2x: require('src/statics/icons/invoker/Wex_icon_2x.png'),
-        icon4x: require('src/statics/icons/invoker/Wex_icon_4x.png'),
-        icon6x: require('src/statics/icons/invoker/Wex_icon_6x.png')
-      },
-      e: {
-        value: 'e',
-        keybind: keybindings.e,
-        name: 'Exort',
-        icon: require('src/statics/icons/invoker/Exort_icon.png'),
-        icon2x: require('src/statics/icons/invoker/Exort_icon_2x.png'),
-        icon4x: require('src/statics/icons/invoker/Exort_icon_4x.png'),
-        icon6x: require('src/statics/icons/invoker/Exort_icon_6x.png')
-      },
-      r: {
-        value: 'r',
-        keybind: keybindings.r,
-        name: 'Invoke',
-        icon: require('src/statics/icons/invoker/Invoke_icon.png'),
-        icon2x: require('src/statics/icons/invoker/Invoke_icon_2x.png'),
-        icon4x: require('src/statics/icons/invoker/Invoke_icon_4x.png'),
-        icon6x: require('src/statics/icons/invoker/Invoke_icon_6x.png')
-      }
-    };
-
-    const InvokerSpells: {
-      [index: string]: {
-        name: string;
-        combination: object;
-        icon: object;
-        icon2x: object;
-        icon4x: object;
-        icon6x: object;
-      };
-    } = {
-      coldSnap: {
-        name: 'Cold Snap',
-        combination: { q: 3 },
-        icon: require('src/statics/icons/invoker/Cold_Snap_icon.png'),
-        icon2x: require('src/statics/icons/invoker/Cold_Snap_icon_2x.png'),
-        icon4x: require('src/statics/icons/invoker/Cold_Snap_icon_4x.png'),
-        icon6x: require('src/statics/icons/invoker/Cold_Snap_icon_6x.png')
-      },
-      ghostWalk: {
-        name: 'Ghost Walk',
-        combination: { q: 2, w: 1 },
-        icon: require('src/statics/icons/invoker/Ghost_Walk_icon.png'),
-        icon2x: require('src/statics/icons/invoker/Ghost_Walk_icon_2x.png'),
-        icon4x: require('src/statics/icons/invoker/Ghost_Walk_icon_4x.png'),
-        icon6x: require('src/statics/icons/invoker/Ghost_Walk_icon_6x.png')
-      },
-      iceWall: {
-        name: 'Ice Wall',
-        combination: { q: 2, e: 1 },
-        icon: require('src/statics/icons/invoker/Ice_Wall_icon.png'),
-        icon2x: require('src/statics/icons/invoker/Ice_Wall_icon_2x.png'),
-        icon4x: require('src/statics/icons/invoker/Ice_Wall_icon_4x.png'),
-        icon6x: require('src/statics/icons/invoker/Ice_Wall_icon_6x.png')
-      },
-      tornado: {
-        name: 'Tornado',
-        combination: { q: 1, w: 2 },
-        icon: require('src/statics/icons/invoker/Tornado_icon.png'),
-        icon2x: require('src/statics/icons/invoker/Tornado_icon_2x.png'),
-        icon4x: require('src/statics/icons/invoker/Tornado_icon_4x.png'),
-        icon6x: require('src/statics/icons/invoker/Tornado_icon_6x.png')
-      },
-      deafeningBlast: {
-        name: 'Deafening Blast',
-        combination: { q: 1, w: 1, e: 1 },
-        icon: require('src/statics/icons/invoker/Deafening_Blast_icon.png'),
-        icon2x: require('src/statics/icons/invoker/Deafening_Blast_icon_2x.png'),
-        icon4x: require('src/statics/icons/invoker/Deafening_Blast_icon_4x.png'),
-        icon6x: require('src/statics/icons/invoker/Deafening_Blast_icon_6x.png')
-      },
-      forgeSpirit: {
-        name: 'Forge Spirit',
-        combination: { q: 1, e: 2 },
-        icon: require('src/statics/icons/invoker/Forge_Spirit_icon.png'),
-        icon2x: require('src/statics/icons/invoker/Forge_Spirit_icon_2x.png'),
-        icon4x: require('src/statics/icons/invoker/Forge_Spirit_icon_4x.png'),
-        icon6x: require('src/statics/icons/invoker/Forge_Spirit_icon_6x.png')
-      },
-      emp: {
-        name: 'EMP',
-        combination: { w: 3 },
-        icon: require('src/statics/icons/invoker/EMP_icon.png'),
-        icon2x: require('src/statics/icons/invoker/EMP_icon_2x.png'),
-        icon4x: require('src/statics/icons/invoker/EMP_icon_4x.png'),
-        icon6x: require('src/statics/icons/invoker/EMP_icon_6x.png')
-      },
-      alacrity: {
-        name: 'Alacrity',
-        combination: { w: 2, e: 1 },
-        icon: require('src/statics/icons/invoker/Alacrity_icon.png'),
-        icon2x: require('src/statics/icons/invoker/Alacrity_icon_2x.png'),
-        icon4x: require('src/statics/icons/invoker/Alacrity_icon_4x.png'),
-        icon6x: require('src/statics/icons/invoker/Alacrity_icon_6x.png')
-      },
-      chaosMeteor: {
-        name: 'Chaos Meteor',
-        combination: { w: 1, e: 2 },
-        icon: require('src/statics/icons/invoker/Chaos_Meteor_icon.png'),
-        icon2x: require('src/statics/icons/invoker/Chaos_Meteor_icon_2x.png'),
-        icon4x: require('src/statics/icons/invoker/Chaos_Meteor_icon_4x.png'),
-        icon6x: require('src/statics/icons/invoker/Chaos_Meteor_icon_6x.png')
-      },
-      sunStrike: {
-        name: 'Sun Strike',
-        combination: { e: 3 },
-        icon: require('src/statics/icons/invoker/Sun_Strike_icon.png'),
-        icon2x: require('src/statics/icons/invoker/Sun_Strike_icon_2x.png'),
-        icon4x: require('src/statics/icons/invoker/Sun_Strike_icon_4x.png'),
-        icon6x: require('src/statics/icons/invoker/Sun_Strike_icon_6x.png')
-      }
-    };
-
-    const spellStack = new Stack();
-
-    const playedTotal = 0;
-
-    const playedSuccessful = 0;
-
-    const playedFailed = 0;
-
-    const audioVolume = parseInt(localStorage.audioVolume) || 100;
+    for (const i in InvokerPrimarySpells) {
+      const e = InvokerPrimarySpells[i as keyof InvokerPrimarySpellType];
+      e.keybind = keybindings[i as keyof KeybindsType];
+    }
 
     return {
       InvokerPrimarySpells,
-      InvokerSpells,
-      randomSpell: null as SpellObject,
-      spellStack,
-      playedTotal,
-      playedSuccessful,
-      playedFailed,
-      audioVolume
+      InvokerCombinedSpells,
+      randomSpell: null as null | CombinedSpellType,
+      spellStack: new Stack(),
+      playedTotal: 0,
+      playedSuccessful: 0,
+      playedFailed: 0,
+      audioVolume: parseInt(localStorage.audioVolume) || 100,
+      usedSpellStack: [] as CombinedSpellType[],
     };
   },
   computed: {
     defaultKeybindings() {
       const bindings: { [index: string]: string } = {};
       for (const key in this.InvokerPrimarySpells) {
-        if (this.InvokerPrimarySpells.hasOwnProperty(key)) {
-          const element = this.InvokerPrimarySpells[key];
-          bindings[element.keybind] = key;
-        }
+        const element = this.InvokerPrimarySpells[
+          key as keyof InvokerPrimarySpellType
+        ];
+        bindings[element.keybind as keyof KeybindsType] = key;
       }
       return bindings;
-    }
+    },
   },
   methods: {
     playAudio(audio: string) {
@@ -271,18 +148,42 @@ export default Vue.extend({
         audioObj.remove();
       });
     },
+    findMatch(): CombinedSpellType | null {
+      let usedSpell = null;
+      for (const key in this.InvokerCombinedSpells) {
+        const element = this.InvokerCombinedSpells[
+          key as keyof InvokerCombinedSpellType
+        ];
+        if (this.spellStack.equals(element.combination)) {
+          usedSpell = element;
+          break;
+        }
+      }
+      return usedSpell;
+    },
+    pushToUsedSpellStack(spell: CombinedSpellType) {
+      if (!this.usedSpellStack.includes(spell)) {
+        this.usedSpellStack.unshift(spell);
+        if (this.usedSpellStack.length > 2) {
+          this.usedSpellStack.pop();
+        }
+      }
+    },
     invoke() {
       if (this.spellStack.data.length === 3 && this.randomSpell !== null) {
         // Use ability / check if is the one show
-        // @ts-ignore
         if (this.spellStack.equals(this.randomSpell.combination)) {
-          // @ts-ignore
           this.randomSpell = this.selectRandomSpell(this.randomSpell);
           this.playAudio('success');
           this.playedSuccessful++;
         } else {
           this.playedFailed++;
           this.playAudio('fail');
+        }
+        // Finding current combination spell
+        const usedSpell = this.findMatch();
+        if (usedSpell) {
+          this.pushToUsedSpellStack(usedSpell);
         }
       } else {
         // Cant use ability
@@ -292,7 +193,9 @@ export default Vue.extend({
     handleKeypress(e: { key: string }) {
       const spellId: string = this.defaultKeybindings[e.key];
       if (spellId) {
-        const selectedSpell = this.InvokerPrimarySpells[spellId];
+        const selectedSpell = this.InvokerPrimarySpells[
+          spellId as keyof InvokerPrimarySpellType
+        ];
         if (selectedSpell.value !== 'r') {
           this.spellStack.unshift(selectedSpell.value);
         } else {
@@ -301,25 +204,27 @@ export default Vue.extend({
         }
       }
     },
-    selectRandomSpell(currentSpell: SpellObject): SpellObject {
+    selectRandomSpell(
+      currentSpell: CombinedSpellType | null
+    ): CombinedSpellType {
       this.playedTotal++;
-      const keys: string[] = Object.keys(this.InvokerSpells);
+      const keys: string[] = Object.keys(this.InvokerCombinedSpells);
       let randomKey: string;
 
       do {
         randomKey = keys[Math.floor(Math.random() * keys.length)];
       } while (
         currentSpell &&
-        currentSpell.name === this.InvokerSpells[randomKey].name
+        currentSpell.name === this.InvokerCombinedSpells[randomKey].name
       );
 
-      return this.InvokerSpells[randomKey];
-    }
+      return this.InvokerCombinedSpells[randomKey];
+    },
   },
   watch: {
     audioVolume(newV) {
       localStorage.audioVolume = newV;
-    }
+    },
   },
   created() {
     window.addEventListener('keydown', this.handleKeypress);
@@ -327,7 +232,7 @@ export default Vue.extend({
   },
   destroyed() {
     window.removeEventListener('keydown', this.handleKeypress);
-  }
+  },
 });
 </script>
 

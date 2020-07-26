@@ -1,10 +1,11 @@
+type DateType = Array<string>
 export default class Stack {
   // FILO stack
 
   maxElements: number;
-  data: Array<string>;
+  data: DateType;
 
-  constructor(initialData: Array<string> = [], maxElements = 3) {
+  constructor(initialData: DateType = [], maxElements = 3) {
     this.maxElements = maxElements;
     this.data = initialData.slice(0, this.maxElements);
   }

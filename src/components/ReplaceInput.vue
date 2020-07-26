@@ -6,6 +6,7 @@
     v-model="displayValue"
     @focus="initFocusValues()"
     @blur="restoreValue()"
+    @input="nextInput()"
     dense
   />
 </template>
@@ -18,35 +19,25 @@ export default Vue.extend({
   props: {
     value: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
       displayValue: this.value,
-      focused: false
     };
   },
   watch: {
-    displayValue(newV) {
-      if (newV) {
-        this.$emit('input', newV);
-      }
-    },
     value(newV) {
       this.displayValue = newV;
-    }
+    },
   },
   methods: {
     restoreValue() {
-      if (!this.displayValue && this.focused) {
-        this.displayValue = this.value;
-        this.focused = false;
-      }
+      this.displayValue = this.value;
     },
     initFocusValues() {
       this.displayValue = '';
-      this.focused = true;
     },
     focus() {
       // @ts-ignore
@@ -55,8 +46,11 @@ export default Vue.extend({
     blur() {
       // @ts-ignore
       this.$refs.input.blur();
-    }
-  }
+    },
+    nextInput() {
+      this.$emit('input', this.displayValue);
+    },
+  },
 });
 </script>
 

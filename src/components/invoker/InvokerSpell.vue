@@ -10,19 +10,19 @@ export default Vue.extend({
   props: {
     spell: {
       type: Object,
-      required: false
+      required: false,
     },
     size: {
-      type: String
+      type: String,
     },
     border: {
       type: String,
-      default: 'square'
-    }
+      default: 'square',
+    },
   },
   computed: {
     icon() {
-      if (!this.spell) {
+      if (!this.spell || !this.spell.icon) {
         return NoIcon;
       }
       let iconSize;
@@ -41,8 +41,8 @@ export default Vue.extend({
           break;
       }
       return iconSize;
-    }
-  }
+    },
+  },
 });
 </script>
 

@@ -30,10 +30,14 @@
       </div>
     </div>
     <div class="col flex justify-center items-start">
-      <InvokerSpell class="full-width" :spell="{}" />
+      <div class="primary-spells">
+        <InvokerSpell class="full-width" :spell="usedSpellStack[0]" />
+      </div>
     </div>
     <div class="col flex justify-center items-start">
-      <InvokerSpell class="full-width" :spell="{}" />
+      <div class="primary-spells">
+        <InvokerSpell class="full-width" :spell="usedSpellStack[1]" />
+      </div>
     </div>
     <div class="col flex justify-center items-center q-mr-sm">
       <div class="primary-spells">
@@ -52,15 +56,23 @@
 import Vue from 'vue';
 import InvokerSpell from 'components/invoker/InvokerSpell.vue';
 import ReplaceInput from 'components/ReplaceInput.vue';
+import {
+  InvokerPrimarySpellType,
+  CombinedSpellType,
+} from 'src/components/invoker/Spells.ts';
 
 export default Vue.extend({
   name: '',
   props: {
-    InvokerPrimarySpells: { type: Object, required: true }
+    InvokerPrimarySpells: {
+      type: Object as () => InvokerPrimarySpellType,
+      required: true,
+    },
+    usedSpellStack: Array as () => CombinedSpellType[],
   },
   components: {
     InvokerSpell,
-    ReplaceInput
+    ReplaceInput,
   },
   data() {
     return {};
@@ -80,7 +92,9 @@ export default Vue.extend({
           const element = keybindings[key];
           if (element === value && keybind !== key) {
             keybindings[key] = '';
-            this.InvokerPrimarySpells[key].keybind = '';
+            this.InvokerPrimarySpells[
+              key as keyof InvokerPrimarySpellType
+            ].keybind = '';
           }
         }
       }
@@ -93,8 +107,8 @@ export default Vue.extend({
         // @ts-ignore
         this.$refs.r.blur();
       }
-    }
-  }
+    },
+  },
 });
 </script>
 

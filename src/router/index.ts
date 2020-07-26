@@ -9,7 +9,7 @@ import { validLanguage, changeLanguage, defaultLanguage } from 'boot/i18n';
  * directly export the Router instantiation
  */
 
-export default route<StoreInterface>(function({ Vue }) {
+export default route<StoreInterface>(function ({ Vue }) {
   Vue.use(VueRouter);
 
   const Router = new VueRouter({
@@ -23,6 +23,14 @@ export default route<StoreInterface>(function({ Vue }) {
     base: process.env.VUE_ROUTER_BASE
   });
 
+  Router.beforeEach((to, from, next) => {
+    if (['/en', '/en/'].includes(to.fullPath)) {
+      return next({
+        path: '/'
+      })
+    }
+    next()
+  })
   Router.beforeResolve((to, from, next) => {
     const { lang } = to.params;
 

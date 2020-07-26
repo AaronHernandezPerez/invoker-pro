@@ -88,38 +88,38 @@ export default Vue.extend({
   data() {
     return {
       drawerLeft: false,
-      year: new Date().getFullYear()
+      year: new Date().getFullYear(),
     };
   },
   computed: {
-    baseLink: function() {
+    baseLink: function () {
       return `/${
         this.$i18n.locale === defaultLanguage ? '' : this.$i18n.locale
       }`;
     },
-    sections: function() {
+    sections: function () {
       return [
         {
           title: 'Play',
           caption: 'Test your skill',
           icon: 'school',
           // @ts-ignore
-          link: this.baseLink
+          link: this.baseLink,
         },
         {
           title: 'About',
           caption: 'About invoker',
           icon: 'car',
-          link: `/${this.$i18n.locale}/about`
-        }
+          link: `/${this.$i18n.locale}/about`,
+        },
       ];
-    }
+    },
   },
   methods: {
     closeDrawer() {
       this.drawerLeft = false;
-    }
-  }
+    },
+  },
 });
 </script>
 

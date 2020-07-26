@@ -26,26 +26,31 @@
 
 <script lang="ts">
 import Vue from 'vue';
-
 import InvokerSpell from 'components/invoker/InvokerSpell.vue';
+
+import {
+  CombinedSpellType,
+  InvokerPrimarySpellType,
+} from 'src/components/invoker/Spells.ts';
+
 export default Vue.extend({
   name: 'InvokerSpellGuide',
   components: {
-    InvokerSpell
+    InvokerSpell,
   },
   props: {
     spell: {
-      type: Object,
-      required: true
+      type: Object as () => CombinedSpellType,
+      required: true,
     },
     primarySpells: {
-      type: Object,
-      required: true
-    }
+      type: Object as () => InvokerPrimarySpellType,
+      required: true,
+    },
   },
   data() {
     return {};
-  }
+  },
 });
 </script>
 
