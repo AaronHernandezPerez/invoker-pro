@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hhr lpR ffr">
+  <q-layout view="hhr lpR fff">
     <q-header elevated class="header bg-grey-10">
       <q-toolbar class="items-strech">
         <q-btn
@@ -68,7 +68,7 @@
     <q-footer
       padding
       elevated
-      class="bg-grey-10 text-white q-px-sm flex items-center justify-between"
+      class="bg-grey-10 text-white q-px-sm q-mt-lg flex items-center justify-between"
     >
       <div class="text-h6">Copyright © {{ year }} Aarón Hernández Pérez</div>
       <LanguageSelector />

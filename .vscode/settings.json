@@ -4,6 +4,5 @@
   "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
   "typescript.tsdk": "node_modules/typescript/lib",
   "vetur.experimental.templateInterpolationService": true,
-  "vetur.useWorkspaceDependencies": true,
   "i18n-ally.localesPaths": "src/i18n"
 }

@@ -1,70 +1,45 @@
 <template>
-  <div>
-    <div class="flex justify-center q-mb-lg">
+  <div class="full-height">
+    <div class="flex justify-center q-mb-md">
       <q-btn
-        round
         color="primary"
         :icon="guideVisible ? 'fas fa-eye-slash': 'fas fa-eye'"
         @click="guideVisible = !guideVisible"
+        :label="$t('Toggle')"
+        size="sm"
       />
     </div>
     <div class="guide-container" :class="{ 'guide-hidden': !guideVisible }">
       <div class="flex items-strech q-mb-md justify-around q-gutter-x-sm">
-        <InvokerSpellGuide
-          class="spell-guide"
-          :spell="InvokerCombinedSpells['coldSnap']"
-          :primarySpells="InvokerPrimarySpells"
+        <InvokerGuideRow :spells="[
+            InvokerCombinedSpells['coldSnap'],
+          ]" />
+      </div>
+      <div class="flex items-strech q-mb-md justify-around q-gutter-x-sm">
+        <InvokerGuideRow
+          :spells="[
+            InvokerCombinedSpells['ghostWalk'],
+            InvokerCombinedSpells['iceWall'],
+          ]"
         />
       </div>
       <div class="flex items-strech q-mb-md justify-around q-gutter-x-sm">
-        <InvokerSpellGuide
-          class="spell-guide"
-          :spell="InvokerCombinedSpells['ghostWalk']"
-          :primarySpells="InvokerPrimarySpells"
-        />
-        <InvokerSpellGuide
-          class="spell-guide"
-          :spell="InvokerCombinedSpells['iceWall']"
-          :primarySpells="InvokerPrimarySpells"
+        <InvokerGuideRow
+          :spells="[
+            InvokerCombinedSpells['tornado'],
+            InvokerCombinedSpells['deafeningBlast'],
+            InvokerCombinedSpells['forgeSpirit'],
+          ]"
         />
       </div>
       <div class="flex items-strech q-mb-md justify-around q-gutter-x-sm">
-        <InvokerSpellGuide
-          class="spell-guide"
-          :spell="InvokerCombinedSpells['tornado']"
-          :primarySpells="InvokerPrimarySpells"
-        />
-        <InvokerSpellGuide
-          class="spell-guide"
-          :spell="InvokerCombinedSpells['deafeningBlast']"
-          :primarySpells="InvokerPrimarySpells"
-        />
-        <InvokerSpellGuide
-          class="spell-guide"
-          :spell="InvokerCombinedSpells['forgeSpirit']"
-          :primarySpells="InvokerPrimarySpells"
-        />
-      </div>
-      <div class="flex items-strech q-mb-md justify-around q-gutter-x-sm">
-        <InvokerSpellGuide
-          class="spell-guide"
-          :spell="InvokerCombinedSpells['emp']"
-          :primarySpells="InvokerPrimarySpells"
-        />
-        <InvokerSpellGuide
-          class="spell-guide"
-          :spell="InvokerCombinedSpells['alacrity']"
-          :primarySpells="InvokerPrimarySpells"
-        />
-        <InvokerSpellGuide
-          class="spell-guide"
-          :spell="InvokerCombinedSpells['chaosMeteor']"
-          :primarySpells="InvokerPrimarySpells"
-        />
-        <InvokerSpellGuide
-          class="spell-guide"
-          :spell="InvokerCombinedSpells['sunStrike']"
-          :primarySpells="InvokerPrimarySpells"
+        <InvokerGuideRow
+          :spells="[
+            InvokerCombinedSpells['emp'],
+            InvokerCombinedSpells['alacrity'],
+            InvokerCombinedSpells['chaosMeteor'],
+            InvokerCombinedSpells['sunStrike']
+          ]"
         />
       </div>
     </div>
@@ -73,7 +48,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import InvokerSpellGuide from 'components/invoker/InvokerSpellGuide.vue';
+import InvokerGuideRow from 'src/components/invoker/InvokerGuideRow.vue';
+
 import {
   InvokerCombinedSpellType,
   InvokerPrimarySpellType,
@@ -81,7 +57,7 @@ import {
 export default Vue.extend({
   name: 'InvokerGuide',
   components: {
-    InvokerSpellGuide,
+    InvokerGuideRow,
   },
   props: {
     InvokerCombinedSpells: {
@@ -102,14 +78,12 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
-.spell-guide {
-  width: 20%;
-  max-width: 4.5vw;
-  min-width: 50px;
-}
-
 .guide-container {
   transition: opacity 0.25s ease;
+  height: calc(100% - 25px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .guide-hidden {

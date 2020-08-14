@@ -1,1 +1,51 @@
 // app global css in SCSS form
+
+.container,
+.container-lg,
+.container-md,
+.container-sm,
+.container-xl {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto
+}
+
+@media (min-width:599px) {
+
+  .container,
+  .container-sm {
+    max-width: 560px
+  }
+}
+
+@media (min-width:1023px) {
+
+  .container,
+  .container-md,
+  .container-sm {
+    max-width: 860px
+  }
+}
+
+@media (min-width:1439px) {
+
+  .container,
+  .container-lg,
+  .container-md,
+  .container-sm {
+    max-width: 1200px
+  }
+}
+
+@media (min-width:1919px) {
+
+  .container,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container-xl {
+    max-width: 1400px
+  }
+}

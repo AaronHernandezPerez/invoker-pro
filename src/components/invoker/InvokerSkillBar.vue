@@ -2,7 +2,12 @@
   <div class="row">
     <div class="col flex justify-center items-center">
       <div class="primary-spells">
-        <InvokerSpell class="full-width" :spell="InvokerPrimarySpells['q']" />
+        <InvokerSpell
+          class="full-width"
+          :spell="InvokerPrimarySpells['q']"
+          :active="true"
+          @click="skillPress(InvokerPrimarySpells['q'].keybind)"
+        />
         <ReplaceInput
           v-model="InvokerPrimarySpells['q'].keybind"
           @input="saveKeybind(InvokerPrimarySpells['q'].keybind, 'q', $refs.w)"
@@ -11,7 +16,11 @@
     </div>
     <div class="col flex justify-center items-center">
       <div class="primary-spells">
-        <InvokerSpell class="full-width" :spell="InvokerPrimarySpells['w']" />
+        <InvokerSpell
+          class="full-width"
+          :spell="InvokerPrimarySpells['w']"
+          @click="skillPress(InvokerPrimarySpells['w'].keybind)"
+        />
         <ReplaceInput
           ref="w"
           v-model="InvokerPrimarySpells['w'].keybind"
@@ -21,7 +30,11 @@
     </div>
     <div class="col flex justify-center items-center">
       <div class="primary-spells">
-        <InvokerSpell class="full-width" :spell="InvokerPrimarySpells['e']" />
+        <InvokerSpell
+          class="full-width"
+          :spell="InvokerPrimarySpells['e']"
+          @click="skillPress(InvokerPrimarySpells['e'].keybind)"
+        />
         <ReplaceInput
           ref="e"
           v-model="InvokerPrimarySpells['e'].keybind"
@@ -41,7 +54,11 @@
     </div>
     <div class="col flex justify-center items-center q-mr-sm">
       <div class="primary-spells">
-        <InvokerSpell class="full-width" :spell="InvokerPrimarySpells['r']" />
+        <InvokerSpell
+          class="full-width"
+          :spell="InvokerPrimarySpells['r']"
+          @click="skillPress(InvokerPrimarySpells['r'].keybind)"
+        />
         <ReplaceInput
           ref="r"
           v-model="InvokerPrimarySpells['r'].keybind"
@@ -62,7 +79,7 @@ import {
 } from 'src/components/invoker/Spells.ts';
 
 export default Vue.extend({
-  name: '',
+  name: 'InvokerSkillBar',
   props: {
     InvokerPrimarySpells: {
       type: Object as () => InvokerPrimarySpellType,
@@ -107,6 +124,10 @@ export default Vue.extend({
         // @ts-ignore
         this.$refs.r.blur();
       }
+    },
+    skillPress(k: string) {
+      console.log(event);
+      this.$emit('skill-press', { key: k });
     },
   },
 });

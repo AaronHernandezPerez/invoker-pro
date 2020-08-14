@@ -1,46 +1,43 @@
 <template>
-  <div class="row q-col-gutter-lg">
-    <div class="col-12 col-sm">
+  <div class="row q-col-gutter-lg invoker-game container">
+    <div class="col-12 col-md">
       <InvokerGuide
         :InvokerCombinedSpells="InvokerCombinedSpells"
         :InvokerPrimarySpells="InvokerPrimarySpells"
       />
     </div>
-
-    <div class="col-12 col-sm last-sm">
-      <div class="column justify-between full-height">
+    <div class="col-12 col-md last-sm">
+      <div class="column justify-between center-column">
         <div class="flex justify-center">
           <InvokerSpell class="random-spell" :spell="randomSpell" size="6x" />
         </div>
-
         <div class="q-my-xl row no-wrap reverse justify-around q-gutter-md">
-          <div class="row no-wrap reverse q-gutter-md">
+          <div class="flex">
             <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[0]]" border="round" />
           </div>
-          <div class="row no-wrap reverse q-gutter-md">
+          <div class="flex">
             <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[1]]" border="round" />
           </div>
-          <div class="row no-wrap reverse q-gutter-md">
+          <div class="flex">
             <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[2]]" border="round" />
           </div>
         </div>
-
         <InvokerSkillBar
           :InvokerPrimarySpells="InvokerPrimarySpells"
           :usedSpellStack="usedSpellStack"
+          @skill-press="handleKeypress"
         />
       </div>
     </div>
-
-    <div class="col-12 col-sm">
+    <div class="col-12 col-md">
       <div class="row">
-        <div class="col">Played: {{ playedTotal }}</div>
+        <div class="col">Played: {{playedTotal}}</div>
       </div>
       <div class="row">
-        <div class="col">Points: {{ playedSuccessful }}</div>
+        <div class="col">Points: {{playedSuccessful}}</div>
       </div>
       <div class="row">
-        <div class="col">Failed: {{ playedFailed }}</div>
+        <div class="col">Failed: {{playedFailed}}</div>
       </div>
       <div>
         Sound volume
@@ -50,9 +47,7 @@
       </div>
     </div>
   </div>
-</template>
-
-<script lang="ts">
+</template><script lang="ts">
 /* eslint-disable @typescript-eslint/unbound-method */
 import Vue from 'vue';
 import InvokerSpell from 'components/invoker/InvokerSpell.vue';
@@ -72,10 +67,17 @@ type KeybindsType = {
 };
 
 if (!LocalStorage.getItem('keybindings')) {
-  LocalStorage.set('keybindings', { q: 'q', w: 'w', e: 'e', r: 'r' });
+  LocalStorage.set('keybindings', {
+    q: 'q',
+    w: 'w',
+    e: 'e',
+    r: 'r',
+  });
 }
 
-type SpellObject = { name: string } | null;
+type SpellObject = {
+  name: string;
+} | null;
 
 import {
   InvokerPrimarySpellType,
@@ -92,6 +94,7 @@ export default Vue.extend({
     InvokerGuide,
     InvokerSkillBar,
   },
+
   data() {
     const keybindings = this.$q.localStorage.getItem(
       'keybindings'
@@ -114,21 +117,28 @@ export default Vue.extend({
       usedSpellStack: [] as CombinedSpellType[],
     };
   },
+
   computed: {
     defaultKeybindings() {
-      const bindings: { [index: string]: string } = {};
+      const bindings: {
+        [index: string]: string;
+      } = {};
+
       for (const key in this.InvokerPrimarySpells) {
         const element = this.InvokerPrimarySpells[
           key as keyof InvokerPrimarySpellType
         ];
         bindings[element.keybind as keyof KeybindsType] = key;
       }
+
       return bindings;
     },
   },
+
   methods: {
     playAudio(audio: string) {
       let path: string;
+
       switch (audio) {
         case 'success':
           path = 'statics/audio/success.mp3';
@@ -144,31 +154,39 @@ export default Vue.extend({
 
       const audioObj = new Audio(path);
       audioObj.volume = this.audioVolume / 100;
+
       audioObj.play().then(() => {
         audioObj.remove();
       });
     },
+
     findMatch(): CombinedSpellType | null {
       let usedSpell = null;
+
       for (const key in this.InvokerCombinedSpells) {
         const element = this.InvokerCombinedSpells[
           key as keyof InvokerCombinedSpellType
         ];
+
         if (this.spellStack.equals(element.combination)) {
           usedSpell = element;
           break;
         }
       }
+
       return usedSpell;
     },
+
     pushToUsedSpellStack(spell: CombinedSpellType) {
       if (!this.usedSpellStack.includes(spell)) {
         this.usedSpellStack.unshift(spell);
+
         if (this.usedSpellStack.length > 2) {
           this.usedSpellStack.pop();
         }
       }
     },
+
     invoke() {
       if (this.spellStack.data.length === 3 && this.randomSpell !== null) {
         // Use ability / check if is the one show
@@ -180,8 +198,10 @@ export default Vue.extend({
           this.playedFailed++;
           this.playAudio('fail');
         }
+
         // Finding current combination spell
         const usedSpell = this.findMatch();
+
         if (usedSpell) {
           this.pushToUsedSpellStack(usedSpell);
         }
@@ -190,12 +210,16 @@ export default Vue.extend({
         this.playAudio('fail');
       }
     },
+
     handleKeypress(e: { key: string }) {
+      console.log('event', e);
       const spellId: string = this.defaultKeybindings[e.key];
+
       if (spellId) {
         const selectedSpell = this.InvokerPrimarySpells[
           spellId as keyof InvokerPrimarySpellType
         ];
+
         if (selectedSpell.value !== 'r') {
           this.spellStack.unshift(selectedSpell.value);
         } else {
@@ -204,6 +228,7 @@ export default Vue.extend({
         }
       }
     },
+
     selectRandomSpell(
       currentSpell: CombinedSpellType | null
     ): CombinedSpellType {
@@ -221,23 +246,26 @@ export default Vue.extend({
       return this.InvokerCombinedSpells[randomKey];
     },
   },
+
   watch: {
     audioVolume(newV) {
       localStorage.audioVolume = newV;
     },
   },
+
   created() {
     window.addEventListener('keydown', this.handleKeypress);
     this.randomSpell = this.selectRandomSpell(this.randomSpell);
   },
+
   destroyed() {
     window.removeEventListener('keydown', this.handleKeypress);
   },
 });
-</script>
+</script><style lang="scss">
+@import 'src/css/quasar.variables.scss';
 
-<style lang="scss">
-@media (max-width: $breakpoint-sm-min) {
+@media (max-width: $breakpoint-xs-max) {
   .last-sm {
     order: 3;
   }
@@ -250,7 +278,17 @@ export default Vue.extend({
 .random-spell {
   max-width: 350px;
 }
+
 .primary-spells {
   max-width: 80px;
+}
+
+.invoker-game {
+  min-height: $landing-height;
+  padding-bottom: 25px;
+}
+
+.center-column {
+  min-height: calc(100vh - 6em);
 }
 </style>

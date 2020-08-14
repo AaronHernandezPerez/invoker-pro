@@ -1,5 +1,10 @@
 <template>
-  <img class="inv-icon" :class="border" :src="icon" />
+  <img
+    class="inv-icon"
+    v-bind:class="[border,  active ? 'active':'', ]"
+    :src="icon"
+    @click="clickHandler"
+  />
 </template>
 
 <script>
@@ -43,6 +48,28 @@ export default Vue.extend({
       return iconSize;
     },
   },
+  data() {
+    return {
+      active: false,
+      timeout: false,
+    };
+  },
+  methods: {
+    activate() {
+      clearTimeout(this.timeout);
+
+      this.active = true;
+      this.timeout = setTimeout(() => {
+        this.active = false;
+      }, 100);
+    },
+    clickHandler() {
+      if (this._events.click) {
+        this._events.click[0]();
+        this.activate();
+      }
+    },
+  },
 });
 </script>
 
@@ -55,7 +82,6 @@ img.inv-icon {
 }
 
 .square {
-  border-style: outset;
   border-width: 3px;
   border-top: outset $light;
   border-left: outset $light;
@@ -66,5 +92,20 @@ img.inv-icon {
 .round {
   border-radius: 100%;
   border: 6px ridge $dark;
+}
+
+.active {
+  &.square {
+    border-width: 3px;
+    border-top: inset $light;
+    border-left: inset $light;
+    border-right: outset $dark;
+    border-bottom: outset $dark;
+  }
+
+  &.round {
+    border-radius: 100%;
+    border: 6px groove $dark;
+  }
 }
 </style>

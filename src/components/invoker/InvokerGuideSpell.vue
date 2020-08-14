@@ -1,7 +1,6 @@
 <template>
   <div class="column justify-between">
-    <div class="text-center">{{spell.name}}</div>
-    <InvokerSpell :spell="spell" />
+    <InvokerSpell :spell="spell" class="q-mb-xs" />
     <div class="full-width">
       <template v-for="(value,key) in spell.combination">
         <InvokerSpell
@@ -34,7 +33,7 @@ import {
 } from 'src/components/invoker/Spells.ts';
 
 export default Vue.extend({
-  name: 'InvokerSpellGuide',
+  name: 'InvokerGuideSpell',
   components: {
     InvokerSpell,
   },
