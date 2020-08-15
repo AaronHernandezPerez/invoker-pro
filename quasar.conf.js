@@ -24,7 +24,7 @@ fs.readdirSync('node_modules/quasar/lang').forEach(e => {
   }
 });
 
-module.exports = configure(function(ctx) {
+module.exports = configure(function (ctx) {
   return {
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
     supportIE: true,

@@ -1,6 +1,7 @@
 <template>
   <div class="full-height">
     <div class="flex justify-center q-mb-md">
+      <h5 class="q-ma-none q-mr-lg">{{ $t('Guide') }}</h5>
       <q-btn
         color="primary"
         :icon="guideVisible ? 'fas fa-eye-slash': 'fas fa-eye'"

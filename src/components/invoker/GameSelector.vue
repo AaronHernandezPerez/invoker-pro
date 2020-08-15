@@ -8,7 +8,7 @@
         </div>
       </div>
       <div class="col">
-        <div class="title">{{ $t('Complete') }}</div>
+        <div class="title">{{ $t('Survival') }}</div>
         <div class="text">{{ $t('Use the ability or combo shown before the time runs out!') }}</div>
       </div>
     </div>
@@ -30,8 +30,8 @@
         </div>
       </div>
       <div class="col">
-        <div class="title">{{ $t('Ability spree') }}</div>
-        <div class="text">{{ $t('Use all ten abilities as fast a possible') }}</div>
+        <div class="title">{{ $t('Trainiing') }}</div>
+        <div class="text">{{ $t('Train with with spells without limit time') }}</div>
       </div>
     </div>
   </div>
@@ -43,15 +43,12 @@ import {
   CompleteGameMode,
   TenGameMode,
   TrainingGameMode,
+  StartedStatus,
 } from 'src/components/invoker/GameModes.ts';
+import { mapActions } from 'vuex';
 
 export default Vue.extend({
   name: 'StartPlaceHolder',
-  props: {
-    gameMode: {
-      type: String as () => string,
-    },
-  },
   data() {
     return {
       CompleteGameMode,
@@ -60,8 +57,11 @@ export default Vue.extend({
     };
   },
   methods: {
+    ...mapActions('InvokerGame', ['setGameStatus', 'setGameMode']),
     selectMode(mode: string) {
-      this.$emit('mode-selected', mode);
+      // this.$emit('mode-selected', mode);
+      this.setGameStatus(StartedStatus);
+      this.setGameMode(mode);
     },
   },
 });

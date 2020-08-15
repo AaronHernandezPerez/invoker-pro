@@ -154,3 +154,15 @@ export const InvokerCombinedSpells: InvokerCombinedSpellType = {
     icon6x: require('src/statics/icons/invoker/Sun_Strike_icon_6x.png')
   }
 };
+
+
+export const InvokerCombinedSpellsCombos: Array<Array<CombinedSpellType>> = [[InvokerCombinedSpells.coldSnap, InvokerCombinedSpells.forgeSpirit],
+[InvokerCombinedSpells.tornado, InvokerCombinedSpells.emp],
+[InvokerCombinedSpells.tornado, InvokerCombinedSpells.chaosMeteor, InvokerCombinedSpells.deafeningBlast],
+[InvokerCombinedSpells.iceWall, InvokerCombinedSpells.chaosMeteor, InvokerCombinedSpells.coldSnap],
+[InvokerCombinedSpells.iceWall, InvokerCombinedSpells.chaosMeteor, InvokerCombinedSpells.sunStrike],
+[InvokerCombinedSpells.iceWall, InvokerCombinedSpells.chaosMeteor, InvokerCombinedSpells.emp],
+[InvokerCombinedSpells.alacrity, InvokerCombinedSpells.forgeSpirit],
+]
+
+export const InvokerSpellsTime = [3, 5, 8];

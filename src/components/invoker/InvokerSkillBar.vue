@@ -1,72 +1,75 @@
 <template>
-  <div class="row">
-    <div class="col-12">
-      <!-- <slot></slot> -->
+  <div>
+    <div>
+      <slot></slot>
     </div>
-    <div class="col flex justify-center items-center">
-      <div class="primary-spells">
-        <InvokerSpell
-          class="full-width"
-          :spell="InvokerPrimarySpells['q']"
-          :active="true"
-          @click="skillPress(InvokerPrimarySpells['q'].keybind)"
-        />
-        <ReplaceInput
-          v-model="InvokerPrimarySpells['q'].keybind"
-          @input="saveKeybind(InvokerPrimarySpells['q'].keybind, 'q', $refs.w)"
-        />
+
+    <div class="row">
+      <div class="col flex justify-center items-center">
+        <div class="primary-spells">
+          <InvokerSpell
+            class="full-width"
+            :spell="InvokerPrimarySpells['q']"
+            :active="true"
+            @click="skillPress(InvokerPrimarySpells['q'].keybind)"
+          />
+          <ReplaceInput
+            v-model="InvokerPrimarySpells['q'].keybind"
+            @input="saveKeybind(InvokerPrimarySpells['q'].keybind, 'q', $refs.w)"
+          />
+        </div>
       </div>
-    </div>
-    <div class="col flex justify-center items-center">
-      <div class="primary-spells">
-        <InvokerSpell
-          class="full-width"
-          :spell="InvokerPrimarySpells['w']"
-          @click="skillPress(InvokerPrimarySpells['w'].keybind)"
-        />
-        <ReplaceInput
-          ref="w"
-          v-model="InvokerPrimarySpells['w'].keybind"
-          @input="saveKeybind(InvokerPrimarySpells['w'].keybind, 'w', $refs.e)"
-        />
+      <div class="col flex justify-center items-center">
+        <div class="primary-spells">
+          <InvokerSpell
+            class="full-width"
+            :spell="InvokerPrimarySpells['w']"
+            @click="skillPress(InvokerPrimarySpells['w'].keybind)"
+          />
+          <ReplaceInput
+            ref="w"
+            v-model="InvokerPrimarySpells['w'].keybind"
+            @input="saveKeybind(InvokerPrimarySpells['w'].keybind, 'w', $refs.e)"
+          />
+        </div>
       </div>
-    </div>
-    <div class="col flex justify-center items-center">
-      <div class="primary-spells">
-        <InvokerSpell
-          class="full-width"
-          :spell="InvokerPrimarySpells['e']"
-          @click="skillPress(InvokerPrimarySpells['e'].keybind)"
-        />
-        <ReplaceInput
-          ref="e"
-          v-model="InvokerPrimarySpells['e'].keybind"
-          @input="saveKeybind(InvokerPrimarySpells['e'].keybind, 'e', $refs.r)"
-        />
+      <div class="col flex justify-center items-center">
+        <div class="primary-spells">
+          <InvokerSpell
+            class="full-width"
+            :spell="InvokerPrimarySpells['e']"
+            @click="skillPress(InvokerPrimarySpells['e'].keybind)"
+          />
+          <ReplaceInput
+            ref="e"
+            v-model="InvokerPrimarySpells['e'].keybind"
+            @input="saveKeybind(InvokerPrimarySpells['e'].keybind, 'e', $refs.r)"
+          />
+        </div>
       </div>
-    </div>
-    <div class="col flex justify-center items-start">
-      <div class="primary-spells">
-        <InvokerSpell class="full-width" :spell="usedSpellStack[0]" />
+      <div class="col flex justify-center items-start">
+        <div class="primary-spells">
+          <InvokerSpell class="full-width" :spell="usedSpellStack[0]" />
+        </div>
       </div>
-    </div>
-    <div class="col flex justify-center items-start">
-      <div class="primary-spells">
-        <InvokerSpell class="full-width" :spell="usedSpellStack[1]" />
+      <div class="col flex justify-center items-start">
+        <div class="primary-spells">
+          <InvokerSpell class="full-width" :spell="usedSpellStack[1]" />
+        </div>
       </div>
-    </div>
-    <div class="col flex justify-center items-center q-mr-sm">
-      <div class="primary-spells">
-        <InvokerSpell
-          class="full-width"
-          :spell="InvokerPrimarySpells['r']"
-          @click="skillPress(InvokerPrimarySpells['r'].keybind)"
-        />
-        <ReplaceInput
-          ref="r"
-          v-model="InvokerPrimarySpells['r'].keybind"
-          @input="saveKeybind(InvokerPrimarySpells['r'].keybind, 'r')"
-        />
+      <div class="col flex justify-center items-center q-mr-sm">
+        <div class="primary-spells">
+          <InvokerSpell
+            class="full-width"
+            :spell="InvokerPrimarySpells['r']"
+            @click="skillPress(InvokerPrimarySpells['r'].keybind)"
+          />
+          <ReplaceInput
+            ref="r"
+            v-model="InvokerPrimarySpells['r'].keybind"
+            @input="saveKeybind(InvokerPrimarySpells['r'].keybind, 'r')"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -129,11 +132,11 @@ export default Vue.extend({
       }
     },
     skillPress(k: string) {
-      console.log(event);
       this.$emit('skill-press', { key: k });
     },
   },
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+</style>

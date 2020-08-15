@@ -9,7 +9,10 @@
 
 <script>
 import Vue from 'vue';
+import { StartedStatus } from 'src/components/invoker/GameModes.ts';
 import NoIcon from 'src/statics/icons/invoker/No_icon.png';
+import { mapState } from 'vuex';
+
 export default Vue.extend({
   name: 'InvokerSpell',
   props: {
@@ -26,6 +29,7 @@ export default Vue.extend({
     },
   },
   computed: {
+    ...mapState('InvokerGame', ['gameStatus']),
     icon() {
       if (!this.spell || !this.spell.icon) {
         return NoIcon;
@@ -47,12 +51,18 @@ export default Vue.extend({
       }
       return iconSize;
     },
+    clickeable() {
+      if (this.clickEvent && this.gameStatus === StartedStatus) {
+        return true;
+      }
+      return false;
+    },
   },
   data() {
     return {
       active: false,
       timeout: false,
-      clickeable: false,
+      clickEvent: false,
     };
   },
   methods: {
@@ -72,7 +82,7 @@ export default Vue.extend({
   },
   created() {
     if (this._events.click) {
-      this.clickeable = true;
+      this.clickEvent = true;
     }
   },
 });
@@ -84,6 +94,7 @@ $light: rgba(255, 255, 255, 0.3);
 $dark: rgba(255, 255, 255, 0.1);
 img.inv-icon {
   width: 100%;
+  transition: opacity 0.25s ease;
 
   &.clickeable:active {
     &.square {
