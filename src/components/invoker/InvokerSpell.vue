@@ -1,7 +1,7 @@
 <template>
   <img
     class="inv-icon"
-    v-bind:class="[border,  active ? 'active':'', ]"
+    :class="[border, clickeable === true ? 'clickeable' : '' ]"
     :src="icon"
     @click="clickHandler"
   />
@@ -52,6 +52,7 @@ export default Vue.extend({
     return {
       active: false,
       timeout: false,
+      clickeable: false,
     };
   },
   methods: {
@@ -64,11 +65,15 @@ export default Vue.extend({
       }, 100);
     },
     clickHandler() {
-      if (this._events.click) {
+      if (this.clickeable) {
         this._events.click[0]();
-        this.activate();
       }
     },
+  },
+  created() {
+    if (this._events.click) {
+      this.clickeable = true;
+    }
   },
 });
 </script>
@@ -79,6 +84,20 @@ $light: rgba(255, 255, 255, 0.3);
 $dark: rgba(255, 255, 255, 0.1);
 img.inv-icon {
   width: 100%;
+
+  &.clickeable:active {
+    &.square {
+      border-top: inset $dark;
+      border-left: inset $dark;
+      border-right: outset $light;
+      border-bottom: outset $light;
+    }
+
+    &.round {
+      border-radius: 100%;
+      border: 6px groove $dark;
+    }
+  }
 }
 
 .square {
@@ -92,20 +111,5 @@ img.inv-icon {
 .round {
   border-radius: 100%;
   border: 6px ridge $dark;
-}
-
-.active {
-  &.square {
-    border-width: 3px;
-    border-top: inset $light;
-    border-left: inset $light;
-    border-right: outset $dark;
-    border-bottom: outset $dark;
-  }
-
-  &.round {
-    border-radius: 100%;
-    border: 6px groove $dark;
-  }
 }
 </style>

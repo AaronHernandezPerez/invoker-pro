@@ -1,26 +1,18 @@
-# Quasar App (invoker-pro)
-
-A Quasar Framework app
+# invoker-pro
 
 ## Install the dependencies
 ```bash
 yarn
-```
-
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
-```bash
 quasar dev
 ```
 
-### Lint the files
-```bash
-yarn run lint
-```
-
-### Build the app for production
-```bash
-quasar build
-```
-
-### Customize the configuration
-See [Configuring quasar.conf.js](https://quasar.dev/quasar-cli/quasar-conf-js).
+### TODO
+change charges to cirlce
+add one or two abilites 
+add time
+add press ot start
+modes:
+  ten random abilities as fast as possible
+  endless combos and simple spells with less time each time untill a cpouple of seconds
+  train  combos and simple spells
+steam integration

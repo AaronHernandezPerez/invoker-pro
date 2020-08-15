@@ -9,24 +9,29 @@
     <div class="col-12 col-md last-sm">
       <div class="column justify-between center-column">
         <div class="flex justify-center">
-          <InvokerSpell class="random-spell" :spell="randomSpell" size="6x" />
+          <InvokerSpell v-if="gameStarted" class="random-spell" :spell="randomSpell" size="6x" />
+          <div v-else></div>
+          <GameSelector />
+          <!-- <StartPlaceHolder v-if="!gameStarted" /> -->
         </div>
-        <div class="q-my-xl row no-wrap reverse justify-around q-gutter-md">
-          <div class="flex">
-            <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[0]]" border="round" />
-          </div>
-          <div class="flex">
-            <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[1]]" border="round" />
-          </div>
-          <div class="flex">
-            <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[2]]" border="round" />
-          </div>
-        </div>
+
         <InvokerSkillBar
           :InvokerPrimarySpells="InvokerPrimarySpells"
           :usedSpellStack="usedSpellStack"
           @skill-press="handleKeypress"
-        />
+        >
+          <div class="q-my-xl row no-wrap reverse justify-around q-gutter-md">
+            <div class="flex">
+              <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[0]]" border="round" />
+            </div>
+            <div class="flex">
+              <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[1]]" border="round" />
+            </div>
+            <div class="flex">
+              <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[2]]" border="round" />
+            </div>
+          </div>
+        </InvokerSkillBar>
       </div>
     </div>
     <div class="col-12 col-md">
@@ -53,7 +58,7 @@ import Vue from 'vue';
 import InvokerSpell from 'components/invoker/InvokerSpell.vue';
 import InvokerGuide from 'components/invoker/InvokerGuide.vue';
 import InvokerSkillBar from 'components/invoker/InvokerSkillBar.vue';
-
+import GameSelector from 'src/components/invoker/GameSelector.vue';
 import Stack from 'src/classes/Stack';
 
 // Settings neccesary localstorage data
@@ -93,6 +98,7 @@ export default Vue.extend({
     InvokerSpell,
     InvokerGuide,
     InvokerSkillBar,
+    GameSelector,
   },
 
   data() {
@@ -108,6 +114,7 @@ export default Vue.extend({
     return {
       InvokerPrimarySpells,
       InvokerCombinedSpells,
+      gameStarted: false,
       randomSpell: null as null | CombinedSpellType,
       spellStack: new Stack(),
       playedTotal: 0,
@@ -213,6 +220,10 @@ export default Vue.extend({
 
     handleKeypress(e: { key: string }) {
       console.log('event', e);
+      if (!this.gameStarted) {
+        return;
+      }
+
       const spellId: string = this.defaultKeybindings[e.key];
 
       if (spellId) {
@@ -245,6 +256,10 @@ export default Vue.extend({
 
       return this.InvokerCombinedSpells[randomKey];
     },
+    startGame() {
+      this.gameStarted = true;
+      this.randomSpell = this.selectRandomSpell(this.randomSpell);
+    },
   },
 
   watch: {
@@ -252,12 +267,9 @@ export default Vue.extend({
       localStorage.audioVolume = newV;
     },
   },
-
   created() {
     window.addEventListener('keydown', this.handleKeypress);
-    this.randomSpell = this.selectRandomSpell(this.randomSpell);
   },
-
   destroyed() {
     window.removeEventListener('keydown', this.handleKeypress);
   },

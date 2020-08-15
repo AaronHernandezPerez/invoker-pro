@@ -1,5 +1,8 @@
 <template>
   <div class="row">
+    <div class="col-12">
+      <!-- <slot></slot> -->
+    </div>
     <div class="col flex justify-center items-center">
       <div class="primary-spells">
         <InvokerSpell
