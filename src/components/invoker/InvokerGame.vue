@@ -1,10 +1,7 @@
 <template>
   <div class="row q-col-gutter-lg invoker-game container">
     <div class="col-12 col-md-3">
-      <InvokerGuide
-        :InvokerCombinedSpells="InvokerCombinedSpells"
-        :InvokerPrimarySpells="InvokerPrimarySpells"
-      />
+      <InvokerGuide />
     </div>
     <div class="col-12 col-md-6 last-sm">
       <div v-if="gameStatus !== UnstartedStatus">
@@ -361,11 +358,14 @@ export default Vue.extend({
       if (this.randomSpells && this.randomSpells.length > 0) {
         spellsTimeIndex = this.randomSpells.length - 1;
       }
-      const TotalTime = InvokerSpellsTime[spellsTimeIndex];
-      console.log('xdd',TotalTime)
+      let totalTime = InvokerSpellsTime[spellsTimeIndex];
+      if (this.$q.platform.is.mobile) {
+        totalTime *= 2;
+      }
+      console.log('xdd', totalTime);
       this.timer.start({
         precision: 'secondTenths',
-        startValues: { seconds: TotalTime },
+        startValues: { seconds: totalTime },
         target: { seconds: 0 },
         countdown: true,
       });
@@ -378,7 +378,7 @@ export default Vue.extend({
         );
 
         this.spellTime = TimeLeft.toFixed(1);
-        this.spellTimePercentage = TimeLeft / TotalTime;
+        this.spellTimePercentage = TimeLeft / totalTime;
       });
 
       this.timer.addEventListener('targetAchieved', () => {

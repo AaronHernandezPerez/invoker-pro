@@ -52,27 +52,20 @@ import Vue from 'vue';
 import InvokerGuideRow from 'src/components/invoker/InvokerGuideRow.vue';
 
 import {
-  InvokerCombinedSpellType,
-  InvokerPrimarySpellType,
+  InvokerCombinedSpells,
+  InvokerPrimarySpells,
 } from 'src/components/invoker/Spells.ts';
+
 export default Vue.extend({
   name: 'InvokerGuide',
   components: {
     InvokerGuideRow,
   },
-  props: {
-    InvokerCombinedSpells: {
-      type: Object as () => InvokerCombinedSpellType,
-      required: true,
-    },
-    InvokerPrimarySpells: {
-      type: Object as () => InvokerPrimarySpellType,
-      required: true,
-    },
-  },
   data() {
     return {
       guideVisible: true,
+      InvokerCombinedSpells,
+      InvokerPrimarySpells,
     };
   },
 });
