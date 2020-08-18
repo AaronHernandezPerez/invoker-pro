@@ -22,10 +22,10 @@ quasar build
 quasar build -m capacitor -T android
 ```
 
-# Sign cordova android apk
+# Sign Capacitor android apk
 
 ### Generates Key 
-pass: 119k30p.
+pass: 123456
 ```bash
 keytool -genkey -v -keystore my-release-key.keystore -alias alias_name -keyalg RSA -keysize 2048 -validity 20000
 ```

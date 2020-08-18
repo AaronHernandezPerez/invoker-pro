@@ -10,6 +10,7 @@
 /* eslint-disable @typescript-eslint/camelcase */
 const webpack = require('webpack'); //where does webpack comes from? wtf
 const { configure } = require('quasar/wrappers');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 // .BundleAnalyzerPlugin;
 
@@ -96,7 +97,10 @@ module.exports = configure(function (ctx) {
         cfg.plugins.push(
           new webpack.DefinePlugin({
             QUASAR_SUPPORTED_LANGUAGES: JSON.stringify(quasarLanguages)
-          })
+          }),
+          new CopyWebpackPlugin([
+            { from: path.resolve(__dirname, 'src/_redirects', './') },
+          ])
         );
       }
     },
