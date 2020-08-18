@@ -1,3 +1,24 @@
 {
-  "title": "Invocador Ruso"
+  "title": "Invocador Ruso",
+  "Average spell time": "Tiempo medio por habilidad",
+  "Invoke these spells": "Invoca estas habilidades",
+  "Last spell time": "Tiempo de la última habilidad",
+  "Options": "Opciones",
+  "Statistics": "Estadísticas",
+  "Vibration": "Vibración",
+  "Your time": "Tu tiempo",
+  "Back": "Volver",
+  "Restart": "Reiniciar",
+  "Stop": "Parar",
+  "Ability spree": "Racha de habilidades",
+  "Select the game mode": "Selecciona el modo de juego",
+  "Survival": "Supervivencia",
+  "Train with spells without limit time": "Practica con las habilidades sin tiempo límite",
+  "Training": "Práctica",
+  "Use all ten abilities as fast a possible": "Usa las diez habilidades lo más rrápido que puedas",
+  "Guide": "Guía",
+  "Toggle": "Alternar",
+  "Press any key to start": "Presiona cualquier tecla para continuar",
+  "About": "Info",
+  "Play": "Jugar"
 }

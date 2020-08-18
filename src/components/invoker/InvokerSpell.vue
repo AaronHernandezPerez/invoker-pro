@@ -95,6 +95,7 @@ $dark: rgba(255, 255, 255, 0.1);
 img.inv-icon {
   width: 100%;
   transition: opacity 0.25s ease;
+  user-select: none;
 
   &.clickeable:active {
     &.square {

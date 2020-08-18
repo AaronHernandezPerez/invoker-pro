@@ -1,77 +1,88 @@
 <template>
   <div class="row q-col-gutter-lg invoker-game container">
-    <div class="col-12 col-md">
+    <div class="col-12 col-md-3">
       <InvokerGuide
         :InvokerCombinedSpells="InvokerCombinedSpells"
         :InvokerPrimarySpells="InvokerPrimarySpells"
       />
     </div>
-    <div class="col-12 col-md last-sm">
-      <div class="column justify-between center-column">
-        {{gameStatus}}
-        <div>
-          <div v-if="gameStatus === StartedStatus">
-            <h4 class="text-center">{{ $t('Invoke these spells') }}</h4>
-            <div class="flex justify-around items-center" v-if="randomSpells">
-              <InvokerSpell
-                v-for="(spell, i) in randomSpells"
-                :key="spell.name"
-                class="random-spell"
-                :spell="spell"
-                size="6x"
-                :disabled="i !== randomSpellsIndex"
-              />
-            </div>
-            <q-linear-progress class="q-my-lg" stripe size="1.5em" :value="0.5">
-              <div class="absolute-full flex flex-center">
-                <q-badge color="primary" :label="'xdd'" />
-              </div>
-            </q-linear-progress>
-          </div>
-          <GameSelector v-else-if="gameStatus === UnstartedStatus" @mode-selected="startGame" />
-          <continue-game v-else-if="gameStatus ===  FinishedStatus"></continue-game>
+    <div class="col-12 col-md-6 last-sm">
+      <div v-if="gameStatus !== UnstartedStatus">
+        <h4 class="text-center">{{ $t('Invoke these spells') }}</h4>
+        <div class="flex justify-around items-center" v-if="randomSpells">
+          <InvokerSpell
+            v-for="(spell, i) in randomSpells"
+            :key="spell.name"
+            class="random-spell"
+            :spell="spell"
+            :disabled="i !== randomSpellsIndex"
+          />
         </div>
 
-        <InvokerSkillBar
-          :InvokerPrimarySpells="InvokerPrimarySpells"
-          :usedSpellStack="usedSpellStack"
-          :gameStatus="gameStatus"
-          @skill-press="handleKeypress"
+        <q-linear-progress
+          class="q-my-lg"
+          stripe
+          size="1.5em"
+          :value="spellTimePercentage"
+          v-if="gameMode === CompleteGameMode"
         >
-          <div class="q-my-xl row no-wrap reverse justify-around q-gutter-md">
-            <div class="flex">
-              <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[0]]" border="round" />
-            </div>
-            <div class="flex">
-              <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[1]]" border="round" />
-            </div>
-            <div class="flex">
-              <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[2]]" border="round" />
-            </div>
+          <div class="absolute-full flex flex-center">
+            <q-badge color="primary" :label="spellTime" />
           </div>
-        </InvokerSkillBar>
+        </q-linear-progress>
+
+        <h5
+          class="text-center flex justify-center items-center q-my-lg"
+          v-else-if="gameMode === TenGameMode"
+        >
+          {{ $t('Your time') }}
+          <q-badge class="q-ml-md time-badge" color="primary">{{spellTime}}</q-badge>
+        </h5>
+        <continue-game></continue-game>
       </div>
+
+      <GameSelector v-else-if="gameStatus === UnstartedStatus" @mode-selected="startGame" />
+
+      <InvokerSkillBar
+        :InvokerPrimarySpells="InvokerPrimarySpells"
+        :usedSpellStack="usedSpellStack"
+        :gameStatus="gameStatus"
+        @skill-press="handleKeypress"
+      >
+        <div class="q-my-xl row no-wrap reverse justify-around q-gutter-md">
+          <div class="flex">
+            <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[0]]" border="round" />
+          </div>
+          <div class="flex">
+            <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[1]]" border="round" />
+          </div>
+          <div class="flex">
+            <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[2]]" border="round" />
+          </div>
+        </div>
+      </InvokerSkillBar>
     </div>
-    <div class="col-12 col-md">
+
+    <div class="col-12 col-md-3">
+      <h5 class="text-center">{{ $t('Statistics') }}</h5>
       <div>Played: {{playedTotal}}</div>
       <div>Points: {{playedSuccessful}}</div>
       <div>Failed: {{playedFailed}}</div>
       <div>
-        Last spell time:
-        <!-- {{lastSpellTime}} -->
-        <AnimatedNumber
-          :value="lastSpellTime"
-          :formatValue="formatTime"
-          :duration="300"
-          :round="3"
-        />
+        {{ $t('Last spell time') }}:
+        <AnimatedNumber :value="lastSpellTime" :formatValue="formatTime" :duration="300" />
       </div>
-      <div>{{ $t('Vibration') }}</div>
+      <div>
+        {{ $t('Average spell time') }}:
+        <AnimatedNumber :value="averageSpellTime" :formatValue="formatTime" :duration="300" />
+      </div>
+      <h5 class="text-center">{{ $t('Options') }}</h5>
+      <div>
+        <q-checkbox left-label v-model="vibration" :label="$t('Vibration')" />
+      </div>
       <div>
         Sound volume
-        <div class="q-px-md">
-          <q-slider v-model="audioVolume" :max="100" :step="5" />
-        </div>
+        <q-slider v-model="audioVolume" :max="100" :step="5" />
       </div>
     </div>
   </div>
@@ -150,18 +161,22 @@ export default Vue.extend({
       e.keybind = keybindings[i as keyof KeybindsType];
     }
 
-    const vibration = this.$q.localStorage.getItem('vibration') || true;
+    let vibration = this.$q.localStorage.getItem('vibration');
+    if (vibration === null) {
+      vibration = true;
+    }
 
-    // const AllSpells = Object.values(InvokerCombinedSpells).map((e) => [e]);
-    // AllSpells.push(...InvokerCombinedSpellsCombos);
-    const AllSpells = [
-      InvokerCombinedSpellsCombos[InvokerCombinedSpellsCombos.length - 2],
-    ];
+    const AllSpells = Object.values(InvokerCombinedSpells).map((e) => [e]);
+    AllSpells.push(...InvokerCombinedSpellsCombos);
+    const CombinedSpells = Object.values(InvokerCombinedSpells).map((e) => [e]);
+
     return {
       // Invoker Spells
       InvokerPrimarySpells,
       InvokerCombinedSpells,
+      // Parsed spells for the player
       AllSpells,
+      CombinedSpells,
       // Selected Spell
       spellIndex: 0,
       randomSpells: null as null | Array<CombinedSpellType>,
@@ -175,6 +190,8 @@ export default Vue.extend({
       playedTotal: 0,
       playedSuccessful: 0,
       playedFailed: 0,
+      spellTime: null as null | string,
+      spellTimePercentage: 1 as number,
       // Player options
       audioVolume: parseInt(localStorage.audioVolume) || 100,
       vibration,
@@ -182,12 +199,14 @@ export default Vue.extend({
       UnstartedStatus,
       StartedStatus,
       FinishedStatus,
+      // Game modes
+      CompleteGameMode,
+      TenGameMode,
     };
   },
-
   computed: {
     ...mapState('InvokerGame', ['gameStatus', 'gameMode']),
-    defaultKeybindings() {
+    defaultKeybindings(): { [index: string]: string } {
       const bindings: {
         [index: string]: string;
       } = {};
@@ -201,10 +220,20 @@ export default Vue.extend({
 
       return bindings;
     },
-    lastSpellTime() {
+    lastSpellTime(): number {
       let returnVal = 0;
       if (this.allSpellTimes.length > 0) {
         returnVal = this.allSpellTimes[this.allSpellTimes.length - 1];
+      }
+
+      return returnVal;
+    },
+    averageSpellTime(): number {
+      let returnVal = 0;
+      if (this.allSpellTimes.length > 0) {
+        returnVal =
+          this.allSpellTimes.reduce((a, b) => a + b, 0) /
+          this.allSpellTimes.length;
       }
 
       return returnVal;
@@ -305,7 +334,7 @@ export default Vue.extend({
       }
     },
     handleKeypress(e: { key: string }) {
-      if (!this.gameStatus) {
+      if (this.gameStatus !== StartedStatus) {
         return;
       }
 
@@ -325,10 +354,15 @@ export default Vue.extend({
         }
       }
     },
-    spellTimer() {
+    completeSpellTimer() {
       this.timer.stop();
-      // this.timer = new Timer();
-      const TotalTime = InvokerSpellsTime[this.randomSpells?.length || 0];
+      this.timer = new Timer();
+      let spellsTimeIndex = 0;
+      if (this.randomSpells && this.randomSpells.length > 0) {
+        spellsTimeIndex = this.randomSpells.length - 1;
+      }
+      const TotalTime = InvokerSpellsTime[spellsTimeIndex];
+      console.log('xdd',TotalTime)
       this.timer.start({
         precision: 'secondTenths',
         startValues: { seconds: TotalTime },
@@ -337,41 +371,96 @@ export default Vue.extend({
       });
 
       this.timer.addEventListener('secondTenthsUpdated', () => {
-        console.log(
-          this.timer.getTimeValues(),
-          this.timer.getTimeValues().toString()
+        console.log('completeSpellTimer');
+        const TimeValues = this.timer.getTimeValues();
+        const TimeLeft = parseFloat(
+          `${TimeValues.seconds}.${TimeValues.secondTenths}`
         );
+
+        this.spellTime = TimeLeft.toFixed(1);
+        this.spellTimePercentage = TimeLeft / TotalTime;
       });
 
       this.timer.addEventListener('targetAchieved', () => {
-        // this.game;
+        this.endGame();
+      });
+    },
+    tenSpellTimer() {
+      this.timer.stop();
+      this.timer = new Timer();
+      this.timer.start({
+        precision: 'secondTenths',
+        target: { seconds: 60 },
+      });
+
+      this.timer.addEventListener('secondTenthsUpdated', () => {
+        console.log('tenSpellTimer');
+        const TimeValues = this.timer.getTimeValues();
+        const TimePassed = parseFloat(
+          `${TimeValues.seconds}.${TimeValues.secondTenths}`
+        );
+        this.spellTime = TimePassed.toFixed(1);
+      });
+
+      this.timer.addEventListener('targetAchieved', () => {
+        this.endGame();
       });
     },
     selectRandomSpells() {
       this.playedTotal++;
       this.randomSpellsIndex = 0;
 
+      const setAllSpells = () => {
+        if (this.spellIndex === 0) {
+          shuffle(this.AllSpells);
+        } else if (this.spellIndex === this.AllSpells.length) {
+          shuffle(this.AllSpells);
+          this.spellIndex = 0;
+        }
+        this.randomSpells = this.AllSpells[this.spellIndex];
+      };
+
       switch (this.gameMode) {
         case CompleteGameMode:
-          if (this.spellIndex === 0) {
-            shuffle(this.AllSpells);
-          } else if (this.spellIndex === this.AllSpells.length) {
-            shuffle(this.AllSpells);
-            this.spellIndex = 0;
-          }
-          this.randomSpells = this.AllSpells[this.spellIndex];
+          setAllSpells();
           // Set Timer
-          this.spellTimer();
+          this.completeSpellTimer();
+          break;
+        case TenGameMode:
+          if (this.spellIndex === 0) {
+            shuffle(this.CombinedSpells);
+            this.tenSpellTimer();
+          } else if (this.spellIndex === this.CombinedSpells.length) {
+            return this.endGame();
+          }
+          this.randomSpells = this.CombinedSpells[this.spellIndex];
+          break;
+        case TrainingGameMode:
+          setAllSpells();
           break;
 
         default:
           break;
       }
-      this.lastSpellDate = new Date();
       this.spellIndex++;
+      this.lastSpellDate = new Date();
     },
     startGame() {
       this.selectRandomSpells();
+    },
+    endGame() {
+      this.setGameStatus(FinishedStatus);
+    },
+    resetGameData() {
+      this.playedTotal = 0;
+      this.playedSuccessful = 0;
+      this.playedFailed = 0;
+      this.spellIndex = 0;
+      this.randomSpells = null;
+      this.allSpellTimes = [];
+      this.lastSpellDate = null;
+      this.usedSpellStack = [];
+      this.spellStack.clear();
     },
     formatTime(t: number): string {
       const formatedT = t.toFixed(3);
@@ -380,13 +469,24 @@ export default Vue.extend({
   },
   watch: {
     gameStatus(newV) {
-      if (newV === StartedStatus) {
-        this.startGame();
-        this.setGameStatus('finished');
+      switch (newV) {
+        case StartedStatus:
+          this.resetGameData();
+          this.startGame();
+          break;
+        case FinishedStatus:
+          this.timer.stop();
+          this.randomSpellsIndex = -1;
+          break;
+        default:
+          break;
       }
     },
     audioVolume(newV) {
       localStorage.audioVolume = newV;
+    },
+    vibration(newV) {
+      this.$q.localStorage.set('vibration', newV);
     },
   },
   created() {
@@ -427,4 +527,9 @@ export default Vue.extend({
 //   min-height: calc(100vh - 6em);
 //   max-height: 1000px;
 // }
+
+.time-badge {
+  height: 1.2em;
+  font-size: 1em;
+}
 </style>

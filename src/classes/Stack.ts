@@ -42,4 +42,8 @@ export default class Stack {
 
     return equal;
   }
+
+  clear() {
+    this.data = [];
+  }
 }

@@ -25,7 +25,7 @@
             v-bind:key="section.title"
             :to="section.link"
             :exact="section.link === baseLink"
-          >{{ $t(section.title) }}</router-link>
+          >{{section.title}}</router-link>
         </div>
 
         <q-space />
@@ -92,22 +92,21 @@ export default Vue.extend({
     };
   },
   computed: {
-    baseLink: function () {
+    baseLink(): string {
       return `/${
         this.$i18n.locale === defaultLanguage ? '' : this.$i18n.locale
       }`;
     },
-    sections: function () {
+    sections(): object[] {
       return [
         {
-          title: 'Play',
+          title: this.$t('Play'),
           caption: 'Test your skill',
           icon: 'school',
-          // @ts-ignore
           link: this.baseLink,
         },
         {
-          title: 'About',
+          title: this.$t('About'),
           caption: 'About invoker',
           icon: 'car',
           link: `/${this.$i18n.locale}/about`,

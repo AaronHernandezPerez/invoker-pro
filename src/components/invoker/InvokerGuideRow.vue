@@ -1,10 +1,10 @@
 <template>
   <div class="full-width">
-    <div class="row">
-      <div class="col text-center" v-for="spell in spells" :key="spell.name">{{spell.name}}</div>
+    <div class="row justify-center q-col-gutter-xs">
+      <div class="col-3 text-center" v-for="spell in spells" :key="spell.name">{{spell.name}}</div>
     </div>
-    <div class="row">
-      <div class="col flex justify-center" v-for="spell in spells" :key="spell.name">
+    <div class="row justify-center q-col-gutter-xs">
+      <div class="col-3 flex justify-center" v-for="spell in spells" :key="spell.name">
         <InvokerGuideSpell
           class="spell-guide"
           :spell="spell"

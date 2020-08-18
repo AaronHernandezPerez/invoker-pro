@@ -1,3 +1,24 @@
 {
-  "title": "Russian invoker"
+  "title": "Russian invoker",
+  "Average spell time": "Average spell time",
+  "Invoke these spells": "Invoke these spells",
+  "Last spell time": "Last spell time",
+  "Options": "Options",
+  "Statistics": "Statistics",
+  "Vibration": "Vibration",
+  "Your time": "Your time",
+  "Back": "Back",
+  "Restart": "Restart",
+  "Stop": "Stop",
+  "Ability spree": "Ability spree",
+  "Select the game mode": "Select the game mode",
+  "Survival": "Survival",
+  "Train with spells without limit time": "Train with spells without limit time",
+  "Training": "Training",
+  "Use all ten abilities as fast a possible": "Use all ten abilities as fast a possible",
+  "Guide": "Guide",
+  "Toggle": "Toggle",
+  "Press any key to start": "Press any key to start",
+  "About": "About",
+  "Play": "Play"
 }

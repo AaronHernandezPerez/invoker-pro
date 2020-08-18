@@ -165,4 +165,4 @@ export const InvokerCombinedSpellsCombos: Array<Array<CombinedSpellType>> = [[In
 [InvokerCombinedSpells.alacrity, InvokerCombinedSpells.forgeSpirit],
 ]
 
-export const InvokerSpellsTime = [3, 5, 8];
+export const InvokerSpellsTime = [2, 3, 4];

@@ -30,8 +30,8 @@
         </div>
       </div>
       <div class="col">
-        <div class="title">{{ $t('Trainiing') }}</div>
-        <div class="text">{{ $t('Train with with spells without limit time') }}</div>
+        <div class="title">{{ $t('Training') }}</div>
+        <div class="text">{{ $t('Train with spells without limit time') }}</div>
       </div>
     </div>
   </div>
