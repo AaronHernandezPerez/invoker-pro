@@ -1,7 +1,7 @@
 <template>
   <div class="q-my-lg">
-    <div class="row q-col-gutter-lg" v-if="gameStatus===FinishedStatus">
-      <div class="col-12 col-sm">
+    <div class="row" v-if="gameStatus===FinishedStatus">
+      <div class="col-12 col-sm q-ma-sm">
         <q-btn
           :label="$t('Restart')"
           color="negative"
@@ -10,7 +10,7 @@
           @click="restart"
         />
       </div>
-      <div class="col-12 col-sm">
+      <div class="col-12 col-sm q-ma-sm">
         <q-btn
           :label="$t('Back')"
           color="primary"

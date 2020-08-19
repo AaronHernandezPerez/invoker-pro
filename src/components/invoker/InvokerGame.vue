@@ -1,9 +1,9 @@
 <template>
-  <div class="row q-col-gutter-lg invoker-game container">
-    <div class="col-12 col-md-3">
+  <div class="row invoker-game container">
+    <div class="col-12 col-md-3 q-px-lg">
       <InvokerGuide />
     </div>
-    <div class="col-12 col-md-6 last-sm">
+    <div class="col-12 col-md-6 q-px-lg last-sm">
       <div v-if="gameStatus !== UnstartedStatus">
         <h4 class="text-center">{{ $t('Invoke these spells') }}</h4>
         <div class="flex justify-around items-center" v-if="randomSpells">
@@ -46,7 +46,7 @@
         :gameStatus="gameStatus"
         @skill-press="handleKeypress"
       >
-        <div class="q-my-xl row no-wrap reverse justify-around q-gutter-md">
+        <div class="q-my-xl flex no-wrap reverse justify-around q-gutter-md">
           <div class="flex">
             <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[0]]" border="round" />
           </div>
@@ -60,7 +60,7 @@
       </InvokerSkillBar>
     </div>
 
-    <div class="col-12 col-md-3">
+    <div class="col-12 col-md-3 q-px-lg">
       <h5 class="text-center">{{ $t('Statistics') }}</h5>
       <div>Played: {{playedTotal}}</div>
       <div>Points: {{playedSuccessful}}</div>
@@ -98,7 +98,7 @@ import Stack from 'src/classes/Stack';
 import Timer from 'easytimer';
 
 import { mapState, mapActions } from 'vuex';
-import { shuffle } from 'src/services/AuxFunctions.ts';
+import { shuffle, vibrate } from 'src/services/AuxFunctions.ts';
 import {
   CompleteGameMode,
   TenGameMode,
@@ -325,9 +325,7 @@ export default Vue.extend({
     },
     vibrate() {
       if (this.vibration) {
-        try {
-          navigator.vibrate(15);
-        } catch (error) {}
+        vibrate();
       }
     },
     handleKeypress(e: { key: string }) {

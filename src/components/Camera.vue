@@ -22,8 +22,8 @@ export default {
   methods: {
     async captureImage() {
       const image = await Camera.getPhoto({
-        quality: 90,
-        allowEditing: true,
+        quality: 100,
+        allowEditing: false,
         resultType: CameraResultType.Uri,
       });
       // image.webPath will contain a path that can be set as an image src.
