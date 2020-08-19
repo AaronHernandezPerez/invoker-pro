@@ -1,7 +1,9 @@
 <template>
   <div class="full-width">
     <div class="row justify-center q-col-gutter-xs">
-      <div class="col-3 text-center" v-for="spell in spells" :key="spell.name">{{spell.name}}</div>
+      <div class="col-3 text-center" v-for="spell in spells" :key="spell.name" :title="spell.name">
+        <div class="ellipsis" v-for="(e, i) in spell.name.split(' ')" :key="i">{{e}}</div>
+      </div>
     </div>
     <div class="row justify-center q-col-gutter-xs">
       <div class="col-3 flex justify-center" v-for="spell in spells" :key="spell.name">

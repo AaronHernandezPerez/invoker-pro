@@ -11,7 +11,6 @@ const getters = {}
 
 const mutations = {
   resetGame: (state: stateType) => {
-    console.log('reset state!')
     state.gameStatus = UnstartedStatus;
     state.gameMode = null;
   },

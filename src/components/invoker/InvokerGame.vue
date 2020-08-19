@@ -1,93 +1,135 @@
 <template>
   <div class="row invoker-game container">
-    <div class="col-12 col-md-3 q-px-lg">
-      <InvokerGuide />
+    <div class="col-12 col-md-3 q-px-md q-mt-md q-mt-md-none">
+      <q-card>
+        <q-card-section>
+          <InvokerGuide />
+        </q-card-section>
+      </q-card>
     </div>
-    <div class="col-12 col-md-6 q-px-lg last-sm">
-      <div v-if="gameStatus !== UnstartedStatus">
-        <h4 class="text-center">{{ $t('Invoke these spells') }}</h4>
-        <div class="flex justify-around items-center" v-if="randomSpells">
-          <InvokerSpell
-            v-for="(spell, i) in randomSpells"
-            :key="spell.name"
-            class="random-spell"
-            :spell="spell"
-            :disabled="i !== randomSpellsIndex"
-          />
-        </div>
+    <div class="col-12 col-md-6 q-px-md q-mt-md q-mt-md-none last-sm">
+      <q-card>
+        <q-card-section>
+          <div v-if="gameStatus !== UnstartedStatus">
+            <h4 class="text-center q-mt-none">{{ $t('Invoke these spells') }}</h4>
+            <div class="flex justify-around items-center" v-if="randomSpells">
+              <InvokerSpell
+                v-for="(spell, i) in randomSpells"
+                :key="spell.name"
+                class="random-spell"
+                :spell="spell"
+                :disabled="i !== randomSpellsIndex"
+              />
+            </div>
 
-        <q-linear-progress
-          class="q-my-lg"
-          stripe
-          size="1.5em"
-          :value="spellTimePercentage"
-          v-if="gameMode === CompleteGameMode"
-        >
-          <div class="absolute-full flex flex-center">
-            <q-badge color="primary" :label="spellTime" />
-          </div>
-        </q-linear-progress>
+            <q-linear-progress
+              class="q-my-lg"
+              stripe
+              size="1.5em"
+              :value="spellTimePercentage"
+              v-if="gameMode === CompleteGameMode"
+            >
+              <div class="absolute-full flex flex-center">
+                <q-badge color="primary" :label="spellTime" />
+              </div>
+            </q-linear-progress>
 
-        <h5
-          class="text-center flex justify-center items-center q-my-lg"
-          v-else-if="gameMode === TenGameMode"
-        >
-          {{ $t('Your time') }}
-          <q-badge class="q-ml-md time-badge" color="primary">{{spellTime}}</q-badge>
-        </h5>
-        <continue-game></continue-game>
-      </div>
+            <h5
+              class="text-center flex justify-center items-center q-my-lg"
+              v-else-if="gameMode === TenGameMode"
+            >
+              {{ $t('Your time') }}
+              <q-badge class="q-ml-md time-badge" color="primary">{{spellTime}}</q-badge>
+            </h5>
+            <continue-game></continue-game>
+          </div>
 
-      <GameSelector v-else-if="gameStatus === UnstartedStatus" @mode-selected="startGame" />
+          <GameSelector v-else-if="gameStatus === UnstartedStatus" @mode-selected="startGame" />
 
-      <InvokerSkillBar
-        :InvokerPrimarySpells="InvokerPrimarySpells"
-        :usedSpellStack="usedSpellStack"
-        :gameStatus="gameStatus"
-        @skill-press="handleKeypress"
-      >
-        <div class="q-my-xl flex no-wrap reverse justify-around q-gutter-md">
-          <div class="flex">
-            <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[0]]" border="round" />
-          </div>
-          <div class="flex">
-            <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[1]]" border="round" />
-          </div>
-          <div class="flex">
-            <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[2]]" border="round" />
-          </div>
-        </div>
-      </InvokerSkillBar>
+          <InvokerSkillBar
+            :InvokerPrimarySpells="InvokerPrimarySpells"
+            :usedSpellStack="usedSpellStack"
+            :gameStatus="gameStatus"
+            @skill-press="handleKeypress"
+          >
+            <div class="q-my-xl row reverse no-wrap justify-around q-gutter-md">
+              <div class="flex">
+                <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[0]]" border="round" />
+              </div>
+              <div class="flex">
+                <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[1]]" border="round" />
+              </div>
+              <div class="flex">
+                <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[2]]" border="round" />
+              </div>
+            </div>
+          </InvokerSkillBar>
+          <div ref="scrollTarget"></div>
+        </q-card-section>
+      </q-card>
     </div>
 
-    <div class="col-12 col-md-3 q-px-lg">
-      <h5 class="text-center">{{ $t('Statistics') }}</h5>
-      <div>Played: {{playedTotal}}</div>
-      <div>Points: {{playedSuccessful}}</div>
-      <div>Failed: {{playedFailed}}</div>
-      <div>
-        {{ $t('Last spell time') }}:
-        <AnimatedNumber :value="lastSpellTime" :formatValue="formatTime" :duration="300" />
-      </div>
-      <div>
-        {{ $t('Average spell time') }}:
-        <AnimatedNumber :value="averageSpellTime" :formatValue="formatTime" :duration="300" />
-      </div>
-      <h5 class="text-center">{{ $t('Options') }}</h5>
-      <div>
-        <q-checkbox left-label v-model="vibration" :label="$t('Vibration')" />
-      </div>
-      <div>
-        Sound volume
-        <q-slider v-model="audioVolume" :max="100" :step="5" />
-      </div>
+    <div class="col-12 col-md-3 q-px-md q-mt-md q-mt-md-none">
+      <q-card>
+        <q-card-section>
+          <h5 class="text-center q-mt-none q-mb-md">{{ $t('Statistics') }}</h5>
+          <div>Played: {{playedTotal}}</div>
+          <div>Points: {{points}}</div>
+          <div>Failed: {{playedFailed}}</div>
+        </q-card-section>
+      </q-card>
+
+      <q-card class="q-mt-lg">
+        <q-card-section>
+          <h5 class="text-center q-mt-none q-mb-md">{{ $t('Spells time') }}</h5>
+          <div>
+            {{ $t('Last') }}:
+            <AnimatedNumber :value="lastSpellTime" :formatValue="formatTime" :duration="300" />
+          </div>
+          <div>
+            {{ $t('Average') }}:
+            <AnimatedNumber :value="averageSpellTime" :formatValue="formatTime" :duration="300" />
+          </div>
+          <div>
+            {{ $t('Fastest') }}:
+            <AnimatedNumber :value="fastestSpellTime" :formatValue="formatTime" :duration="300" />
+          </div>
+          <div>
+            {{ $t('Slowest') }}:
+            <AnimatedNumber :value="slowestSpellTime" :formatValue="formatTime" :duration="300" />
+          </div>
+        </q-card-section>
+      </q-card>
+
+      <q-card class="q-mt-lg">
+        <q-card-section>
+          <h5 class="text-center q-mt-none q-mb-md">{{ $t('Options') }}</h5>
+          <div>
+            <q-checkbox left-label v-model="vibration" :label="$t('Vibration')" />
+          </div>
+          <div class="flex items-center">
+            {{ $t('Sound volume') }}
+            <div class="flex-grow q-px-sm">
+              <q-slider
+                class="q-ml-sm"
+                v-model="audioVolume"
+                :max="100"
+                :min="0"
+                :step="5"
+                label
+                :label-value="audioVolume + '%'"
+              />
+            </div>
+          </div>
+        </q-card-section>
+      </q-card>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 /* eslint-disable @typescript-eslint/unbound-method */
-import Vue from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import InvokerSpell from 'components/invoker/InvokerSpell.vue';
 import InvokerGuide from 'components/invoker/InvokerGuide.vue';
 import InvokerSkillBar from 'components/invoker/InvokerSkillBar.vue';
@@ -108,6 +150,15 @@ import {
   FinishedStatus,
 } from 'src/components/invoker/GameModes.ts';
 
+import {
+  InvokerPrimarySpellType,
+  InvokerPrimarySpells,
+  InvokerCombinedSpells,
+  InvokerCombinedSpellsCombos,
+  CombinedSpellType,
+  InvokerCombinedSpellType,
+  InvokerSpellsTime,
+} from 'components/invoker/Spells';
 // Settings neccesary localstorage data
 import { LocalStorage } from 'quasar';
 
@@ -127,17 +178,13 @@ if (!LocalStorage.getItem('keybindings')) {
   });
 }
 
-import {
-  InvokerPrimarySpellType,
-  InvokerPrimarySpells,
-  InvokerCombinedSpells,
-  InvokerCombinedSpellsCombos,
-  CombinedSpellType,
-  InvokerCombinedSpellType,
-  InvokerSpellsTime,
-} from 'components/invoker/Spells';
-
-export default Vue.extend({
+export default (Vue as VueConstructor<
+  Vue & {
+    $refs: {
+      scrollTarget: HTMLScriptElement;
+    };
+  }
+>).extend({
   name: 'InvokerGame',
   components: {
     InvokerSpell,
@@ -147,7 +194,6 @@ export default Vue.extend({
     AnimatedNumber,
     ContinueGame,
   },
-
   data() {
     const keybindings = this.$q.localStorage.getItem(
       'keybindings'
@@ -185,7 +231,7 @@ export default Vue.extend({
       allSpellTimes: [] as Array<number>,
       lastSpellDate: null as null | Date,
       playedTotal: 0,
-      playedSuccessful: 0,
+      points: 0,
       playedFailed: 0,
       spellTime: null as null | string,
       spellTimePercentage: 1 as number,
@@ -235,6 +281,22 @@ export default Vue.extend({
 
       return returnVal;
     },
+    fastestSpellTime() {
+      let returnVal = 0;
+      if (this.allSpellTimes.length > 0) {
+        returnVal = Math.min.apply(null, this.allSpellTimes);
+      }
+
+      return returnVal;
+    },
+    slowestSpellTime() {
+      let returnVal = 0;
+      if (this.allSpellTimes.length > 0) {
+        returnVal = Math.max.apply(null, this.allSpellTimes);
+      }
+
+      return returnVal;
+    },
   },
   methods: {
     ...mapActions('InvokerGame', ['resetGame', 'setGameStatus']),
@@ -243,11 +305,14 @@ export default Vue.extend({
 
       switch (audio) {
         case 'success':
-          path = 'statics/audio/success.mp3';
+          // path = 'statics/audio/success.mp3';
+          path = 'statics/audio/Invoke.mpeg';
           break;
         case 'fail':
-          path = 'statics/audio/fail.mp3';
+          // path = 'statics/audio/fail.mp3';
+          path = 'statics/audio/oof.mp3';
           break;
+          2;
         default:
           return;
           break;
@@ -296,11 +361,10 @@ export default Vue.extend({
         ) {
           this.playAudio('success');
           this.randomSpellsIndex++;
-          this.playedSuccessful++;
+          this.points++;
           if (this.lastSpellDate) {
             const now = new Date();
-            // @ts-ignore
-            const time = (now - this.lastSpellDate) / 1000;
+            const time = (now.getTime() - this.lastSpellDate.getTime()) / 1000;
             this.allSpellTimes.push(time);
             this.lastSpellDate = now;
           }
@@ -309,6 +373,9 @@ export default Vue.extend({
           }
         } else {
           this.playedFailed++;
+          if (this.points > 0) {
+            this.points--;
+          }
           this.playAudio('fail');
         }
 
@@ -360,7 +427,6 @@ export default Vue.extend({
       if (this.$q.platform.is.mobile) {
         totalTime *= 2;
       }
-      console.log('xdd', totalTime);
       this.timer.start({
         precision: 'secondTenths',
         startValues: { seconds: totalTime },
@@ -369,7 +435,6 @@ export default Vue.extend({
       });
 
       this.timer.addEventListener('secondTenthsUpdated', () => {
-        console.log('completeSpellTimer');
         const TimeValues = this.timer.getTimeValues();
         const TimeLeft = parseFloat(
           `${TimeValues.seconds}.${TimeValues.secondTenths}`
@@ -392,7 +457,6 @@ export default Vue.extend({
       });
 
       this.timer.addEventListener('secondTenthsUpdated', () => {
-        console.log('tenSpellTimer');
         const TimeValues = this.timer.getTimeValues();
         const TimePassed = parseFloat(
           `${TimeValues.seconds}.${TimeValues.secondTenths}`
@@ -451,7 +515,7 @@ export default Vue.extend({
     },
     resetGameData() {
       this.playedTotal = 0;
-      this.playedSuccessful = 0;
+      this.points = 0;
       this.playedFailed = 0;
       this.spellIndex = 0;
       this.randomSpells = null;
@@ -479,6 +543,8 @@ export default Vue.extend({
         default:
           break;
       }
+
+      this.$refs.scrollTarget.scrollIntoView({ behavior: 'smooth' });
     },
     audioVolume(newV) {
       localStorage.audioVolume = newV;
@@ -520,11 +586,6 @@ export default Vue.extend({
 .invoker-game {
   padding-bottom: 25px;
 }
-
-// .center-column {
-//   min-height: calc(100vh - 6em);
-//   max-height: 1000px;
-// }
 
 .time-badge {
   height: 1.2em;

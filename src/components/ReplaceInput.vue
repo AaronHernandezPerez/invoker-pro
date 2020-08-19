@@ -12,9 +12,15 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { VueConstructor } from 'vue';
 
-export default Vue.extend({
+export default (Vue as VueConstructor<
+  Vue & {
+    $refs: {
+      input: { focus: Function; blur: Function };
+    };
+  }
+>).extend({
   name: 'ReplaceInput',
   props: {
     value: {
@@ -40,11 +46,9 @@ export default Vue.extend({
       this.displayValue = '';
     },
     focus() {
-      // @ts-ignore
       this.$refs.input.focus();
     },
     blur() {
-      // @ts-ignore
       this.$refs.input.blur();
     },
     nextInput() {

@@ -1,9 +1,16 @@
 {
   "vetur.validation.template": true,
   "vetur.format.enable": true,
-  "eslint.validate": ["javascript", "javascriptreact", "typescript", "vue"],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "vue"
+  ],
   "typescript.tsdk": "node_modules/typescript/lib",
   "vetur.experimental.templateInterpolationService": true,
   "i18n-ally.localesPaths": "src/i18n",
-  "i18n-ally.keystyle": "nested"
+  "i18n-ally.ignoreFiles": [
+    "src-capacitor/android/app/build/*"
+  ]
 }

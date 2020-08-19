@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h4 class="text-center">{{ $t('Select the game mode') }}</h4>
+    <h4 class="text-center q-mt-none">{{ $t('Select the game mode') }}</h4>
     <div class="row mode complete-m" @click="selectMode(CompleteGameMode)">
       <div class="col-3 flex justify-center items-center">
         <div class="icon-row">

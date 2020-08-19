@@ -10,7 +10,7 @@
         size="sm"
       />
     </div>
-    <div class="guide-container" :class="{ 'guide-hidden': !guideVisible }">
+    <expander v-model="guideVisible">
       <div class="flex items-strech q-mb-md justify-around q-gutter-x-sm">
         <InvokerGuideRow :spells="[
             InvokerCombinedSpells['coldSnap'],
@@ -43,14 +43,14 @@
           ]"
         />
       </div>
-    </div>
+    </expander>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import InvokerGuideRow from 'src/components/invoker/InvokerGuideRow.vue';
-
+import Expander from 'src/components/Expander.vue';
 import {
   InvokerCombinedSpells,
   InvokerPrimarySpells,
@@ -60,6 +60,7 @@ export default Vue.extend({
   name: 'InvokerGuide',
   components: {
     InvokerGuideRow,
+    Expander,
   },
   data() {
     return {

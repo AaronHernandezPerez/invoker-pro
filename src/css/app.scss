@@ -19,8 +19,6 @@ $train-mode-light: lighten($train-mode, 1%);
 .container-sm,
 .container-xl {
   width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
   margin-right: auto;
   margin-left: auto
 }
@@ -29,7 +27,7 @@ $train-mode-light: lighten($train-mode, 1%);
 
   .container,
   .container-sm {
-    max-width: 560px
+    max-width: 600px
   }
 }
 
@@ -38,7 +36,7 @@ $train-mode-light: lighten($train-mode, 1%);
   .container,
   .container-md,
   .container-sm {
-    max-width: 960px
+    max-width: 1024px
   }
 }
 
@@ -48,7 +46,7 @@ $train-mode-light: lighten($train-mode, 1%);
   .container-lg,
   .container-md,
   .container-sm {
-    max-width: 1260px
+    max-width: 1440px
   }
 }
 
@@ -59,6 +57,10 @@ $train-mode-light: lighten($train-mode, 1%);
   .container-md,
   .container-sm,
   .container-xl {
-    max-width: 1460px
+    max-width: 1440px
   }
+}
+
+.flex-grow {
+  flex-grow: 1;
 }

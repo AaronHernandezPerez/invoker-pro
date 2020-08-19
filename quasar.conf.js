@@ -93,7 +93,7 @@ module.exports = configure(function (ctx) {
           });
         }
 
-        cfg.plugins.push(new BundleAnalyzerPlugin())
+        // cfg.plugins.push(new BundleAnalyzerPlugin())
         cfg.plugins.push(
           new webpack.DefinePlugin({
             QUASAR_SUPPORTED_LANGUAGES: JSON.stringify(quasarLanguages)
@@ -116,6 +116,7 @@ module.exports = configure(function (ctx) {
     framework: {
       iconSet: 'material-icons', // Quasar icon set
       lang: 'en-us', // Quasar language pack
+      cssAddon: true,
 
       // Possible values for "all":
       // * 'auto' - Auto-import needed Quasar components & directives

@@ -57,7 +57,7 @@
           <InvokerSpell class="full-width" :spell="usedSpellStack[1]" />
         </div>
       </div>
-      <div class="col flex justify-center items-center q-mr-sm">
+      <div class="col flex justify-center items-center">
         <div class="primary-spells">
           <InvokerSpell
             class="full-width"
@@ -76,7 +76,7 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { VueConstructor } from 'vue';
 import InvokerSpell from 'components/invoker/InvokerSpell.vue';
 import ReplaceInput from 'components/ReplaceInput.vue';
 import {
@@ -84,7 +84,13 @@ import {
   CombinedSpellType,
 } from 'src/components/invoker/Spells.ts';
 
-export default Vue.extend({
+export default (Vue as VueConstructor<
+  Vue & {
+    $refs: {
+      r: { focus: Function; blur: Function };
+    };
+  }
+>).extend({
   name: 'InvokerSkillBar',
   props: {
     InvokerPrimarySpells: {
@@ -127,7 +133,6 @@ export default Vue.extend({
       if (next) {
         next.focus();
       } else {
-        // @ts-ignore
         this.$refs.r.blur();
       }
     },
