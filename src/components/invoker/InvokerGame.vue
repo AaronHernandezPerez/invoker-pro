@@ -1,14 +1,14 @@
 <template>
-  <div class="row invoker-game container">
+  <div class="row invoker-game">
     <div class="col-12 col-md-3 q-px-md q-mt-md q-mt-md-none">
-      <q-card>
+      <q-card class="q-py-md">
         <q-card-section>
           <InvokerGuide />
         </q-card-section>
       </q-card>
     </div>
     <div class="col-12 col-md-6 q-px-md q-mt-md q-mt-md-none last-sm">
-      <q-card>
+      <q-card class="q-py-md">
         <q-card-section>
           <div v-if="gameStatus !== UnstartedStatus">
             <h4 class="text-center q-mt-none">{{ $t('Invoke these spells') }}</h4>
@@ -65,17 +65,22 @@
             </div>
           </InvokerSkillBar>
           <div ref="scrollTarget"></div>
+          <div id="sound-preload">
+            <audio v-for="sound in sounds" preload="auto" :key="sound">
+              <source :src="sound" :type="'audio/' + sound.split('.').pop()" />
+            </audio>
+          </div>
         </q-card-section>
       </q-card>
     </div>
 
     <div class="col-12 col-md-3 q-px-md q-mt-md q-mt-md-none">
-      <q-card>
+      <q-card class="q-py-md">
         <q-card-section>
           <h5 class="text-center q-mt-none q-mb-md">{{ $t('Statistics') }}</h5>
-          <div>Played: {{playedTotal}}</div>
-          <div>Points: {{points}}</div>
-          <div>Failed: {{playedFailed}}</div>
+          <div>{{ $t('Played') }}: {{playedTotal}}</div>
+          <div>{{ $t('Points') }}: {{points}}</div>
+          <div>{{ $t('Failed') }}: {{playedFailed}}</div>
         </q-card-section>
       </q-card>
 
@@ -245,6 +250,12 @@ export default (Vue as VueConstructor<
       // Game modes
       CompleteGameMode,
       TenGameMode,
+      // Sounds
+      sounds: {
+        invoke: 'statics/audio/invoke.wav',
+        oof: 'statics/audio/oof.mp3',
+        // fail: 'statics/audio/fail.mp3'
+      },
     };
   },
   computed: {
@@ -305,12 +316,10 @@ export default (Vue as VueConstructor<
 
       switch (audio) {
         case 'success':
-          // path = 'statics/audio/success.mp3';
-          path = 'statics/audio/Invoke.mpeg';
+          path = this.sounds.invoke;
           break;
         case 'fail':
-          // path = 'statics/audio/fail.mp3';
-          path = 'statics/audio/oof.mp3';
+          path = this.sounds.oof;
           break;
           2;
         default:
@@ -590,5 +599,10 @@ export default (Vue as VueConstructor<
 .time-badge {
   height: 1.2em;
   font-size: 1em;
+}
+
+#sound-preload {
+  visibility: hidden;
+  height: 0px;
 }
 </style>

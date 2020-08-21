@@ -1,6 +1,6 @@
 {
   "appId": "org.cordova.quasar.app",
-  "appName": "Russian Invoker",
+  "appName": "Play invoker",
   "bundledWebRuntime": false,
   "npmClient": "yarn",
   "webDir": "www"

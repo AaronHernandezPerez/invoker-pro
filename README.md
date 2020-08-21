@@ -68,14 +68,13 @@ Also install the following dependencies
 yarn add -D @capacitor/core
 ```
 
+## I18n keys
+```bash
+yarn vue-i18n-extract report -v "./src/**/*.?(js|vue)" -l "./src/i18n/*.?(js|json|yml|yaml)" -a
+```
 
 ### TODO
 change charges to cirlce
-add one or two abilites 
-add time
-add press ot start
-modes:
-  ten random abilities as fast as possible
-  endless combos and simple spells with less time each time untill a cpouple of seconds
-  train  combos and simple spells
 steam integration
+Add lore and abilities
+Preload sounds

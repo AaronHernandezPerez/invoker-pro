@@ -12,10 +12,14 @@
           class="q-mr-md drawer-icon"
           :class="{ 'rotate-90-cw': drawerLeft }"
         />
+        <router-link class="title flex items-center" :to="baseLink">
+          <q-avatar rounded>
+            <img src="statics\icons\logo.png" />
+          </q-avatar>
 
-        <router-link class="title" :to="baseLink">
-          <div class="flex items-center justify-center">{{ $t('title') }}</div>
+          <q-toolbar-title>{{ $t('title') }}</q-toolbar-title>
         </router-link>
+
         <div
           v-if="$q.screen.gt.sm"
           class="toolbar-link q-ml-xl q-gutter-md text-body2 flex items-center self-stretch no-wrap"
@@ -54,7 +58,7 @@
             <q-item-section avatar>
               <q-icon :name="section.icon" />
             </q-item-section>
-            <q-item-section>{{ $t(section.title) }}</q-item-section>
+            <q-item-section>{{ section.title }}</q-item-section>
           </q-item>
 
           <q-separator v-if="section.separator" />
@@ -80,6 +84,7 @@
 import Vue from 'vue';
 import { defaultLanguage } from 'boot/i18n';
 import LanguageSelector from 'components/LanguageSelector.vue';
+import { TranslateResult } from 'vue-i18n';
 
 export default Vue.extend({
   name: 'MainLayout',
@@ -97,19 +102,27 @@ export default Vue.extend({
         this.$i18n.locale === defaultLanguage ? '' : this.$i18n.locale
       }`;
     },
-    sections(): object[] {
+    sections(): {
+      title: TranslateResult;
+      caption: string;
+      icon: string;
+      link: string;
+      separator: boolean;
+    }[] {
       return [
         {
           title: this.$t('Play'),
           caption: 'Test your skill',
-          icon: 'school',
+          icon: 'sports_esports',
           link: this.baseLink,
+          separator: false,
         },
         {
           title: this.$t('About'),
           caption: 'About invoker',
-          icon: 'car',
+          icon: 'assignment',
           link: `/${this.$i18n.locale}/about`,
+          separator: false,
         },
       ];
     },
@@ -175,6 +188,6 @@ export default Vue.extend({
 <style lang="scss">
 // Non scoped scss
 aside.q-drawer {
-  margin-top: 50px;
+  // margin-top: 50px;
 }
 </style>

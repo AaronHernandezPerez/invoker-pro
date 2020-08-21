@@ -1,6 +1,8 @@
 <template>
   <q-page padding>
-    <InvokerGame />
+    <div class="container">
+      <InvokerGame />
+    </div>
   </q-page>
 </template>
 
