@@ -36,7 +36,7 @@ export default route<StoreInterface>(function ({ Vue }) {
         }
       }
     }
-    else if (!validLanguage(lang)) {
+    else if (!validLanguage(lang) && to.name) {
       // Changes language
       return next({ name: to.name, params: { lang: i18n.locale } });
     } else {
