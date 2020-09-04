@@ -12,7 +12,6 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { TranslateResult } from 'vue-i18n';
 import InvokerSpell from 'src/components/invoker/InvokerSpell.vue';
 import {
   PrimarySpellType,

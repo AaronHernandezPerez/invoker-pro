@@ -53,11 +53,15 @@ export const i18n = new VueI18n({
 });
 
 export function changeLanguage(language: string) {
+  if (language === i18n.locale) {
+    return true;
+  }
+  if (!supportedLanguages[language]) {
+    return false;
+  }
   // Setting quasar languages
-
   i18n.locale = language;
   const qLang = supportedLanguages[language].quasarLang;
-
   import(
     /* webpackInclude: /(es|en-us)\.js$/ */
     'quasar/lang/' + qLang
@@ -70,9 +74,15 @@ export function changeLanguage(language: string) {
       // @ts-ignore
       Quasar.lang.set(import('quasar/lang/en-us').default);
     });
+
+  return true
 }
 
 export default boot(({ app }) => {
   // Set i18n instance on app
   app.i18n = i18n;
 });
+
+
+// Change to original language
+changeLanguage(getBrowserLanguage());

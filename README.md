@@ -31,11 +31,11 @@ keytool -genkey -v -keystore my-release-key.keystore -alias alias_name -keyalg R
 ```
 ###  Signs apk with key
 ```bash
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore <path-to-unsigned-apk-file> alias_name
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore dist/capacitor/android/apk/release/app-release-unsigned.apk alias_name
 ```
 ###  Generates signed apk
 ```bash
-zipalign -v 4 <path-to-same-apk-file> HelloWorld.apk
+zipalign -v 4 dist/capacitor/android/apk/release/app-release-unsigned.apk PlayInvoker.apk
 ```
 
 
@@ -74,7 +74,5 @@ yarn vue-i18n-extract report -v "./src/**/*.?(js|vue)" -l "./src/i18n/*.?(js|jso
 ```
 
 ### TODO
-change charges to cirlce
 steam integration
-Add lore and abilities
-Preload sounds
+meta tags

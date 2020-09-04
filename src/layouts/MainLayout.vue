@@ -12,7 +12,7 @@
           class="q-mr-md drawer-icon"
           :class="{ 'rotate-90-cw': drawerLeft }"
         />
-        <router-link class="title flex items-center" :to="baseLink">
+        <router-link class="title flex items-center q-ml-md-lg" :to="baseLink">
           <q-avatar rounded>
             <img src="statics\icons\logo.png" />
           </q-avatar>
@@ -33,8 +33,6 @@
         </div>
 
         <q-space />
-
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 

@@ -2,7 +2,7 @@ import { route } from 'quasar/wrappers';
 import VueRouter from 'vue-router';
 import { StoreInterface } from '../store';
 import routes from './routes';
-import { validLanguage, changeLanguage, defaultLanguage } from 'boot/i18n';
+import { validLanguage, changeLanguage, defaultLanguage, i18n } from 'boot/i18n';
 
 /*
  * If not building with SSR mode, you can
@@ -24,30 +24,30 @@ export default route<StoreInterface>(function ({ Vue }) {
   });
 
   Router.beforeEach((to, from, next) => {
-    if (['/en', '/en/'].includes(to.fullPath)) {
-      return next({
-        path: '/'
-      })
+    const { lang } = to.params
+
+    if (!lang) {
+      if (to.name === 'index') {
+        if (i18n.locale !== defaultLanguage) {
+          // Force language paramter for all but the default language
+          return next({ name: to.name, params: { lang: i18n.locale } })
+        } else {
+          console.log('this is the default language ')
+        }
+      }
     }
+    else if (!validLanguage(lang)) {
+      // Changes language
+      return next({ name: to.name, params: { lang: i18n.locale } });
+    } else {
+      changeLanguage(lang)
+      if (to.name === 'index' && i18n.locale === defaultLanguage) {
+        next({ name: to.name })
+      }
+    }
+
     next()
   })
-  Router.beforeResolve((to, from, next) => {
-    const { lang } = to.params;
-
-    if (!lang || lang === from.params.lang) {
-      next();
-      return;
-    } else if (validLanguage(lang)) {
-      changeLanguage(lang);
-      next();
-      return;
-    } else {
-      next({
-        path: to.path.replace(lang, defaultLanguage)
-      });
-      return;
-    }
-  });
 
   return Router;
 });

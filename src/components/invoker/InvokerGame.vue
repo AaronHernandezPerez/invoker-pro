@@ -90,18 +90,22 @@
           <div>
             {{ $t('Last') }}:
             <AnimatedNumber :value="lastSpellTime" :formatValue="formatTime" :duration="300" />
+            <span style="margin-left: 4px">s</span>
           </div>
           <div>
             {{ $t('Average') }}:
             <AnimatedNumber :value="averageSpellTime" :formatValue="formatTime" :duration="300" />
+            <span style="margin-left: 4px">s</span>
           </div>
           <div>
             {{ $t('Fastest') }}:
             <AnimatedNumber :value="fastestSpellTime" :formatValue="formatTime" :duration="300" />
+            <span style="margin-left: 4px">s</span>
           </div>
           <div>
             {{ $t('Slowest') }}:
             <AnimatedNumber :value="slowestSpellTime" :formatValue="formatTime" :duration="300" />
+            <span style="margin-left: 4px">s</span>
           </div>
         </q-card-section>
       </q-card>
@@ -602,7 +606,7 @@ export default (Vue as VueConstructor<
 }
 
 #sound-preload {
-  visibility: hidden;
+  visibility: none;
   height: 0px;
 }
 </style>

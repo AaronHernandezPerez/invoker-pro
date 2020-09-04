@@ -12,7 +12,7 @@ const webpack = require('webpack'); //where does webpack comes from? wtf
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { configure } = require('quasar/wrappers');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 // Getting suported languages by quasar
 const fs = require('fs');

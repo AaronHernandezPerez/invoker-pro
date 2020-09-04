@@ -1,10 +1,6 @@
 import { RouteConfig } from 'vue-router';
 
 const routes: RouteConfig[] = [
-  // {
-  //   path: '/en',
-  //   redirect: '/'
-  // },
   {
     path: '/:lang?',
     component: () => import('layouts/MainLayout.vue'),
