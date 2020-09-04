@@ -52,7 +52,7 @@
             :gameStatus="gameStatus"
             @skill-press="handleKeypress"
           >
-            <div class="q-my-xl flex justify-around items-center q-gutter-md">
+            <div class="q-my-xl flex no-wrap justify-around items-center q-gutter-md">
               <div>
                 <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[0]]" border="round" />
               </div>
