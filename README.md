@@ -77,3 +77,4 @@ yarn vue-i18n-extract report -v "./src/**/*.?(js|vue)" -l "./src/i18n/*.?(js|jso
 steam integration
 meta tags
 Fix phone vibration
+<!-- Find equivalent languages https://www.npmjs.com/package/country-language ? -->
