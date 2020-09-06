@@ -1,5 +1,5 @@
 import { Platform } from 'quasar'
-import { Plugins } from '@capacitor/core'
+import { Plugins, HapticsImpactStyle } from '@capacitor/core'
 const { Haptics } = Plugins
 /**
  * Knuth-Fisher-Yates shuffle js
@@ -33,7 +33,7 @@ export function shuffle<T>(array: Array<T>): Array<T> {
 export function vibrate() {
   try {
     if (Platform.is.capacitor) {
-      Haptics.vibrate()
+      Haptics.impact({ style: HapticsImpactStyle.Heavy })
     } else {
       navigator.vibrate(15);
     }

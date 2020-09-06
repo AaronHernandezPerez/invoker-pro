@@ -9,8 +9,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable @typescript-eslint/camelcase */
 const webpack = require('webpack'); //where does webpack comes from? wtf
-const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+// const path = require('path');
 const { configure } = require('quasar/wrappers');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
@@ -28,7 +27,6 @@ fs.readdirSync('node_modules/quasar/lang').forEach(e => {
 module.exports = configure(function (ctx) {
   return {
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ie
-    supportIE: true,
 
     // https://quasar.dev/quasar-cli/cli-documentation/supporting-ts
     supportTS: {
@@ -68,12 +66,9 @@ module.exports = configure(function (ctx) {
       devtool: 'source-map',
       // Add dependencies for transpiling with Babel (Array of regexes)
       // (from node_modules, which are by default not transpiled).
-      // Does not applies to modern builds.
       // transpileDependencies: [],
 
-      // modern: true, // https://quasar.dev/quasar-cli/modern-build
       // rtl: false, // https://quasar.dev/options/rtl-support
-      // preloadChunks: true,
       // showProgress: false,
       // gzip: true,
       // analyze: true,
@@ -98,9 +93,7 @@ module.exports = configure(function (ctx) {
           new webpack.DefinePlugin({
             QUASAR_SUPPORTED_LANGUAGES: JSON.stringify(quasarLanguages)
           }),
-          new CopyWebpackPlugin([
-            { from: path.resolve(__dirname, 'src/_redirects', './') },
-          ])
+
         );
       }
     },

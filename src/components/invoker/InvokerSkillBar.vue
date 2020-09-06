@@ -11,7 +11,8 @@
             class="full-width"
             :spell="InvokerPrimarySpells['q']"
             :active="true"
-            @click="skillPress(InvokerPrimarySpells['q'].keybind)"
+            v-touch:tap="skillPress(InvokerPrimarySpells['q'].keybind)"
+            v-touch-class="'active'"
           />
           <ReplaceInput
             v-model="InvokerPrimarySpells['q'].keybind"
@@ -24,7 +25,8 @@
           <InvokerSpell
             class="full-width"
             :spell="InvokerPrimarySpells['w']"
-            @click="skillPress(InvokerPrimarySpells['w'].keybind)"
+            v-touch:tap="skillPress(InvokerPrimarySpells['w'].keybind)"
+            v-touch-class="'active'"
           />
           <ReplaceInput
             ref="w"
@@ -38,7 +40,9 @@
           <InvokerSpell
             class="full-width"
             :spell="InvokerPrimarySpells['e']"
-            @click="skillPress(InvokerPrimarySpells['e'].keybind)"
+            v-touch:tap="skillPress(InvokerPrimarySpells['e'].keybind)"
+            @click="'xd'"
+            v-touch-class="'active'"
           />
           <ReplaceInput
             ref="e"
@@ -62,7 +66,8 @@
           <InvokerSpell
             class="full-width"
             :spell="InvokerPrimarySpells['r']"
-            @click="skillPress(InvokerPrimarySpells['r'].keybind)"
+            v-touch:tap="skillPress(InvokerPrimarySpells['r'].keybind)"
+            v-touch-class="'active'"
           />
           <ReplaceInput
             ref="r"
@@ -137,7 +142,7 @@ export default (Vue as VueConstructor<
       }
     },
     skillPress(k: string) {
-      this.$emit('skill-press', { key: k });
+      return () => this.$emit('skill-press', { key: k });
     },
   },
 });

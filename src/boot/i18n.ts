@@ -2,7 +2,7 @@ import { boot } from 'quasar/wrappers';
 import messages from 'src/i18n';
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
-import { Quasar } from 'quasar';
+import { Quasar, LocalStorage } from 'quasar';
 import i18nCountries from 'i18n-iso-countries';
 import i18nCountriesEn from 'i18n-iso-countries/langs/en.json';
 import i18nCountriesEs from 'i18n-iso-countries/langs/es.json';
@@ -75,6 +75,7 @@ export function changeLanguage(language: string) {
       Quasar.lang.set(import('quasar/lang/en-us').default);
     });
 
+  LocalStorage.set('language', language);
   return true
 }
 
@@ -85,4 +86,8 @@ export default boot(({ app }) => {
 
 
 // Change to original language
-changeLanguage(getBrowserLanguage());
+if (!LocalStorage.getItem('language')) {
+  changeLanguage(getBrowserLanguage());
+} else {
+
+}

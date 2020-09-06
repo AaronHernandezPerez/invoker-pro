@@ -5,7 +5,7 @@
         <q-card-section>
           <h3 class="text-center q-my-xs">{{ $t('invoker.name') }}</h3>
           <div class="flex justify-center q-my-lg">
-            <q-img src="statics/icons/invoker/invoker_vert.jpg" width="25%" />
+            <img src="~assets/icons/invoker/invoker_vert.jpg" width="25%" />
           </div>
           <p class="text-center subtitle">{{ $t('invoker.roles') }}</p>
         </q-card-section>

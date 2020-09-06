@@ -14,7 +14,7 @@
         />
         <router-link class="title flex items-center q-ml-md-lg" :to="baseLink">
           <q-avatar rounded>
-            <img src="statics\icons\logo.png" />
+            <img src="~assets/icons/logo.png" />
           </q-avatar>
 
           <q-toolbar-title>{{ $t('title') }}</q-toolbar-title>

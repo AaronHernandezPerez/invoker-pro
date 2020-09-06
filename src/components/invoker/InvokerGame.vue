@@ -65,11 +65,11 @@
             </div>
           </InvokerSkillBar>
           <div ref="scrollTarget"></div>
-          <div id="sound-preload">
+          <!-- <div id="sound-preload">
             <audio v-for="sound in sounds" preload="auto" :key="sound">
               <source :src="sound" :type="'audio/' + sound.split('.').pop()" />
             </audio>
-          </div>
+          </div>-->
         </q-card-section>
       </q-card>
     </div>
@@ -256,9 +256,9 @@ export default (Vue as VueConstructor<
       TenGameMode,
       // Sounds
       sounds: {
-        invoke: 'statics/audio/invoke.wav',
-        oof: 'statics/audio/oof.mp3',
-        // fail: 'statics/audio/fail.mp3'
+        invoke: require('src/assets/audio/invoke.wav'),
+        oof: require('src/assets/audio/oof.mp3'),
+        // fail:  require('src/assets/audio/fail.mp3')
       },
     };
   },

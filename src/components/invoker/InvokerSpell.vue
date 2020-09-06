@@ -1,16 +1,11 @@
 <template>
-  <img
-    class="inv-icon"
-    :class="[border, clickeable === true ? 'clickeable' : '' ]"
-    :src="icon"
-    @click="clickHandler"
-  />
+  <img class="inv-icon" :class="[border, clickeable === true ? 'clickeable' : '' ]" :src="icon" />
 </template>
 
 <script>
 import Vue from 'vue';
 import { StartedStatus } from 'src/components/invoker/GameModes.ts';
-import NoIcon from 'src/statics/icons/invoker/No_icon.png';
+import NoIcon from 'src/assets/icons/invoker/No_icon.png';
 import { mapState } from 'vuex';
 
 export default Vue.extend({
@@ -52,38 +47,14 @@ export default Vue.extend({
       return iconSize;
     },
     clickeable() {
-      if (this.clickEvent && this.gameStatus === StartedStatus) {
+      if (this.gameStatus === StartedStatus) {
         return true;
       }
       return false;
     },
   },
   data() {
-    return {
-      active: false,
-      timeout: false,
-      clickEvent: false,
-    };
-  },
-  methods: {
-    activate() {
-      clearTimeout(this.timeout);
-
-      this.active = true;
-      this.timeout = setTimeout(() => {
-        this.active = false;
-      }, 100);
-    },
-    clickHandler() {
-      if (this.clickeable) {
-        this._events.click[0]();
-      }
-    },
-  },
-  created() {
-    if (this._events.click) {
-      this.clickEvent = true;
-    }
+    return {};
   },
 });
 </script>
@@ -97,7 +68,7 @@ img.inv-icon {
   transition: opacity 0.25s ease;
   user-select: none;
 
-  &.clickeable:active {
+  &.clickeable.active:active {
     &.square {
       border-top: inset $dark;
       border-left: inset $dark;

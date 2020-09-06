@@ -11,38 +11,36 @@
       />
     </div>
     <expander v-model="guideVisible">
-      <div class="flex items-strech q-mb-md justify-around q-gutter-x-sm">
-        <InvokerGuideRow :spells="[
-            InvokerCombinedSpells['coldSnap'],
-          ]" />
-      </div>
-      <div class="flex items-strech q-mb-md justify-around q-gutter-x-sm">
-        <InvokerGuideRow
-          :spells="[
+      <InvokerGuideRow
+        class="q-mt-md"
+        :spells="[
+          InvokerCombinedSpells['coldSnap'],
+      ]"
+      />
+      <InvokerGuideRow
+        class="q-mt-md"
+        :spells="[
             InvokerCombinedSpells['ghostWalk'],
             InvokerCombinedSpells['iceWall'],
           ]"
-        />
-      </div>
-      <div class="flex items-strech q-mb-md justify-around q-gutter-x-sm">
-        <InvokerGuideRow
-          :spells="[
+      />
+      <InvokerGuideRow
+        class="q-mt-md"
+        :spells="[
             InvokerCombinedSpells['tornado'],
             InvokerCombinedSpells['deafeningBlast'],
             InvokerCombinedSpells['forgeSpirit'],
           ]"
-        />
-      </div>
-      <div class="flex items-strech q-mb-md justify-around q-gutter-x-sm">
-        <InvokerGuideRow
-          :spells="[
+      />
+      <InvokerGuideRow
+        class="q-mt-md"
+        :spells="[
             InvokerCombinedSpells['emp'],
             InvokerCombinedSpells['alacrity'],
             InvokerCombinedSpells['chaosMeteor'],
             InvokerCombinedSpells['sunStrike']
           ]"
-        />
-      </div>
+      />
     </expander>
   </div>
 </template>

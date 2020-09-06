@@ -76,5 +76,6 @@ yarn vue-i18n-extract report -v "./src/**/*.?(js|vue)" -l "./src/i18n/*.?(js|jso
 ### TODO
 steam integration
 meta tags
+splash
 Fix phone vibration
 <!-- Find equivalent languages https://www.npmjs.com/package/country-language ? -->
