@@ -79,3 +79,7 @@ meta tags
 splash
 Fix phone vibration
 <!-- Find equivalent languages https://www.npmjs.com/package/country-language ? -->
+Rename cmd
+```
+FOR /R %x IN (*.png) DO ren "%x" splash.png
+```
