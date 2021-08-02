@@ -1,4 +1,17 @@
-# invoker-pro
+# Invoker-pro
+
+A game made to Improve my Invoker skills, made with Typescript Vue, Vuex and i18n
+
+It also has an android App using Electron
+
+<p align="center" >
+  <img src="data/img1.PNG" alt="Room" />
+</p>
+
+<p align="center" >
+  <img src="data/img2.PNG" alt="Room" />
+</p>
+
 
 ## Install the dependencies
 ```bash
@@ -76,9 +89,10 @@ yarn vue-i18n-extract report -v "./src/**/*.?(js|vue)" -l "./src/i18n/*.?(js|jso
 ### TODO
 steam integration
 meta tags
-splash
-Fix phone vibration
+splash is streched
 <!-- Find equivalent languages https://www.npmjs.com/package/country-language ? -->
+
+
 Rename cmd
 ```
 FOR /R %x IN (*.png) DO ren "%x" splash.png
