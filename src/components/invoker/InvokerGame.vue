@@ -379,7 +379,6 @@ export default defineComponent({
     },
     handleKeypress(e: { key: string }) {
       if (this.gameStatus !== StartedStatus) {
-        debugger
         return;
       }
 
