@@ -24,15 +24,15 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import InvokerSpell from 'components/invoker/InvokerSpell.vue';
 
 import {
   CombinedSpellType,
   InvokerPrimarySpellType,
-} from 'src/components/invoker/Spells.ts';
+} from 'src/components/invoker/Spells';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'InvokerGuideSpell',
   components: {
     InvokerSpell,

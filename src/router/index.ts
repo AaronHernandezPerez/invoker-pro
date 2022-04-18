@@ -1,53 +1,38 @@
 import { route } from 'quasar/wrappers';
-import VueRouter from 'vue-router';
-import { StoreInterface } from '../store';
+import {
+  createMemoryHistory,
+  createRouter,
+  createWebHashHistory,
+  createWebHistory,
+} from 'vue-router';
+import { StateInterface } from '../store';
 import routes from './routes';
-import { validLanguage, changeLanguage, defaultLanguage, i18n } from 'boot/i18n';
 
 /*
  * If not building with SSR mode, you can
- * directly export the Router instantiation
+ * directly export the Router instantiation;
+ *
+ * The function below can be async too; either use
+ * async/await or return a Promise which resolves
+ * with the Router instance.
  */
 
-export default route<StoreInterface>(function ({ Vue }) {
-  Vue.use(VueRouter);
+export default route<StateInterface>(function (/* { store, ssrContext } */) {
+  const createHistory = process.env.SERVER
+    ? createMemoryHistory
+    : (process.env.VUE_ROUTER_MODE === 'history' ? createWebHistory : createWebHashHistory);
 
-  const Router = new VueRouter({
-    scrollBehavior: () => ({ x: 0, y: 0 }),
+  const Router = createRouter({
+    scrollBehavior: () => ({ left: 0, top: 0 }),
     routes,
 
-    // Leave these as is and change from quasar.conf.js instead!
+    // Leave this as is and make changes in quasar.conf.js instead!
     // quasar.conf.js -> build -> vueRouterMode
     // quasar.conf.js -> build -> publicPath
-    mode: process.env.VUE_ROUTER_MODE,
-    base: process.env.VUE_ROUTER_BASE
+    history: createHistory(
+      process.env.MODE === 'ssr' ? void 0 : process.env.VUE_ROUTER_BASE
+    ),
   });
-
-  Router.beforeEach((to, from, next) => {
-    const { lang } = to.params
-
-    if (!lang) {
-      if (to.name === 'index') {
-        if (i18n.locale !== defaultLanguage) {
-          // Force language paramter for all but the default language
-          return next({ name: to.name, params: { lang: i18n.locale } })
-        } else {
-          console.log('this is the default language ')
-        }
-      }
-    }
-    else if (!validLanguage(lang) && to.name) {
-      // Changes language
-      return next({ name: to.name, params: { lang: i18n.locale } });
-    } else {
-      changeLanguage(lang)
-      if (to.name === 'index' && i18n.locale === defaultLanguage) {
-        next({ name: to.name })
-      }
-    }
-
-    next()
-  })
 
   return Router;
 });

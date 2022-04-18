@@ -7,9 +7,9 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import InvokerGame from 'components/invoker/InvokerGame.vue';
-export default Vue.extend({
+export default defineComponent({
   name: 'PageIndex',
   components: { InvokerGame },
   data() {

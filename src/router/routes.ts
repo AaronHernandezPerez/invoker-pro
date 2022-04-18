@@ -1,6 +1,6 @@
-import { RouteConfig } from 'vue-router';
+import { RouteRecordRaw } from 'vue-router';
 
-const routes: RouteConfig[] = [
+const routes: RouteRecordRaw[] = [
   {
     path: '/:lang?',
     component: () => import('layouts/MainLayout.vue'),
@@ -9,16 +9,10 @@ const routes: RouteConfig[] = [
       {
         path: 'about',
         name: 'about',
-        component: () => import('pages/About.vue')
-      }
-    ]
-  }
+        component: () => import('pages/About.vue'),
+      },
+    ],
+  },
 ];
-
-// Always leave this as last one
-routes.push({
-  path: '*',
-  component: () => import('pages/Error404.vue')
-})
 
 export default routes;

@@ -12,7 +12,6 @@ $train-mode: $green-5;
 $train-mode-dark: darken($train-mode, 20%);
 $train-mode-light: lighten($train-mode, 1%);
 
-
 .container,
 .container-lg,
 .container-md,
@@ -20,44 +19,40 @@ $train-mode-light: lighten($train-mode, 1%);
 .container-xl {
   width: 100%;
   margin-right: auto;
-  margin-left: auto
+  margin-left: auto;
 }
 
 @media (min-width: 600px) {
-
   .container,
   .container-sm {
-    max-width: 600px
+    max-width: 600px;
   }
 }
 
-@media (min-width:1024px) {
-
+@media (min-width: 1024px) {
   .container,
   .container-md,
   .container-sm {
-    max-width: 1024px
+    max-width: 1024px;
   }
 }
 
-@media (min-width:1440px) {
-
+@media (min-width: 1440px) {
   .container,
   .container-lg,
   .container-md,
   .container-sm {
-    max-width: 1440px
+    max-width: 1440px;
   }
 }
 
-@media (min-width:1920px) {
-
+@media (min-width: 1920px) {
   .container,
   .container-lg,
   .container-md,
   .container-sm,
   .container-xl {
-    max-width: 1440px
+    max-width: 1440px;
   }
 }
 

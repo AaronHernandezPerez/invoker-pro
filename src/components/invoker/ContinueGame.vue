@@ -7,7 +7,7 @@
           color="negative"
           class="full-width"
           size="lg"
-          @click="restart"
+          @click="restart()"
         />
       </div>
       <div class="col-12 col-sm q-ma-sm">
@@ -27,14 +27,14 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import { mapActions, mapState } from 'vuex';
 import {
   StartedStatus,
   FinishedStatus,
-} from 'src/components/invoker/GameModes.ts';
+} from 'src/components/invoker/GameModes';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'ContinueGame',
   data() {
     return {

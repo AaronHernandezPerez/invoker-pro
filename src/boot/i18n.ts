@@ -1,41 +1,19 @@
-import { boot } from 'quasar/wrappers';
-import messages from 'src/i18n';
-import Vue from 'vue';
-import VueI18n from 'vue-i18n';
 import { Quasar, LocalStorage } from 'quasar';
-import i18nCountries from 'i18n-iso-countries';
-import i18nCountriesEn from 'i18n-iso-countries/langs/en.json';
-import i18nCountriesEs from 'i18n-iso-countries/langs/es.json';
+import { boot } from 'quasar/wrappers';
+import { createI18n } from 'vue-i18n';
 
-i18nCountries.registerLocale(i18nCountriesEn);
-i18nCountries.registerLocale(i18nCountriesEs);
+import messages from 'src/i18n';
 
-import CountryFlag from 'vue-country-flag';
-Vue.component('country-flag', CountryFlag);
-
-declare module 'vue/types/vue' {
-  interface Vue {
-    i18n: VueI18n;
-  }
-}
-
-Vue.use(VueI18n);
-
-// const quasarTotalLanguages = QUASAR_SUPPORTED_LANGUAGES; // Data given from webpack
 const supportedLanguages: { [index: string]: { [index: string]: string } } = {
-  en: { quasarLang: 'en-us', name: 'English' },
-  es: { quasarLang: 'es', name: 'Spanish' }
+  en: { quasarLang: 'en-US', name: 'English' },
+  es: { quasarLang: 'es', name: 'Spanish' },
 };
-const appLanguages = Object.keys(supportedLanguages);
-Vue.prototype.$supportedLanguages = appLanguages;
+export const appLanguages = Object.keys(supportedLanguages);
 export const defaultLanguage = 'en';
 
 export function getBrowserLanguage() {
-  const lang = Quasar.lang
-    .getLocale()
-    .split('-')
-    .shift();
-  if (appLanguages.includes(lang)) {
+  const lang = Quasar.lang.getLocale()?.split('-').shift();
+  if (lang && appLanguages.includes(lang)) {
     return lang;
   }
 
@@ -46,48 +24,40 @@ export function validLanguage(lang: string) {
   return appLanguages.includes(lang);
 }
 
-export const i18n = new VueI18n({
+const i18n = createI18n({
   locale: defaultLanguage,
   fallbackLocale: defaultLanguage,
-  messages
+  messages,
 });
 
 export function changeLanguage(language: string) {
-  if (language === i18n.locale) {
+  if (language === i18n.global.locale) {
     return true;
   }
   if (!supportedLanguages[language]) {
     return false;
   }
   // Setting quasar languages
-  i18n.locale = language;
+  i18n.global.locale = language;
   const qLang = supportedLanguages[language].quasarLang;
   import(
-    /* webpackInclude: /(es|en-us)\.js$/ */
+    /* webpackInclude: /(es|en-US)\.js$/ */
     'quasar/lang/' + qLang
   )
-    .then(lang => {
+    .then((lang) => {
       Quasar.lang.set(lang.default);
     })
-    .catch(error => {
+    .catch((error) => {
       console.error('Cant find qLang for', qLang, error);
       // @ts-ignore
-      Quasar.lang.set(import('quasar/lang/en-us').default);
+      Quasar.lang.set(import('quasar/lang/en-US').default);
     });
 
   LocalStorage.set('language', language);
-  return true
+  return true;
 }
 
 export default boot(({ app }) => {
   // Set i18n instance on app
-  app.i18n = i18n;
+  app.use(i18n);
 });
-
-
-// Change to original language
-if (!LocalStorage.getItem('language')) {
-  changeLanguage(getBrowserLanguage());
-} else {
-
-}

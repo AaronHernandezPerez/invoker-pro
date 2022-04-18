@@ -11,21 +11,21 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import InvokerSpell from 'src/components/invoker/InvokerSpell.vue';
 import {
   PrimarySpellType,
   CombinedSpellType,
-} from 'src/components/invoker/Spells.ts';
+} from 'src/components/invoker/Spells';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'AbilityShowcase',
   components: {
     InvokerSpell,
   },
   props: {
     spell: Object as () => PrimarySpellType | CombinedSpellType,
-    keySpell: String as () => string,
+    keySpell: String as () => string | undefined,
   },
   data() {
     return {};

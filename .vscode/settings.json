@@ -1,6 +1,11 @@
 {
-  "vetur.validation.template": true,
-  "vetur.format.enable": true,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": true,
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": [
+    "source.fixAll.eslint"
+  ],
   "eslint.validate": [
     "javascript",
     "javascriptreact",
@@ -8,15 +13,10 @@
     "vue"
   ],
   "typescript.tsdk": "node_modules/typescript/lib",
-  "vetur.experimental.templateInterpolationService": true,
-  "i18n-ally.localesPaths": "src/i18n",
-  "i18n-ally.ignoredLocales": [
-    "en",
-    "EN"
-  ],
-  "i18n-ally.ignoreFiles": [
-    "src-capacitor/**/*.js",
-    "src-capacitor/**/*.vue",
-  ],
-  "i18n-ally.keystyle": "nested",
+  "[vue]": {
+    "editor.defaultFormatter": "johnsoncodehk.volar"
+  },
+  "i18n-ally.localesPaths": [
+    "src/i18n"
+  ]
 }

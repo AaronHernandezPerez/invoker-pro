@@ -38,16 +38,16 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from 'vue';
 import {
   CompleteGameMode,
   TenGameMode,
   TrainingGameMode,
   StartedStatus,
-} from 'src/components/invoker/GameModes.ts';
+} from 'src/components/invoker/GameModes';
 import { mapActions } from 'vuex';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'StartPlaceHolder',
   data() {
     return {
@@ -59,7 +59,6 @@ export default Vue.extend({
   methods: {
     ...mapActions('InvokerGame', ['setGameStatus', 'setGameMode']),
     selectMode(mode: string) {
-      // this.$emit('mode-selected', mode);
       this.setGameStatus(StartedStatus);
       this.setGameMode(mode);
     },
@@ -79,6 +78,7 @@ export default Vue.extend({
 
   &.complete-m {
     border-color: $complete-mode;
+
     &:hover {
       border-color: $complete-mode-dark;
     }
@@ -90,6 +90,7 @@ export default Vue.extend({
 
   &.ten-m {
     border-color: $ten-mode;
+
     &:hover {
       border-color: $ten-mode-dark;
     }
@@ -101,6 +102,7 @@ export default Vue.extend({
 
   &.train-m {
     border-color: $train-mode;
+
     &:hover {
       border-color: $train-mode-dark;
     }

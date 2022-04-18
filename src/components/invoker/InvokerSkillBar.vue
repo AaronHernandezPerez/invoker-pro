@@ -7,48 +7,26 @@
     <div class="row">
       <div class="col flex justify-center items-center">
         <div class="primary-spells">
-          <InvokerSpell
-            class="full-width"
-            :spell="InvokerPrimarySpells['q']"
-            :active="true"
-            v-touch:tap="skillPress(InvokerPrimarySpells['q'].keybind)"
-            v-touch-class="'active'"
-          />
-          <ReplaceInput
-            v-model="InvokerPrimarySpells['q'].keybind"
-            @input="saveKeybind(InvokerPrimarySpells['q'].keybind, 'q', $refs.w)"
-          />
+          <InvokerSpell class="full-width cursor-pointer" :spell="primarySpells['q']" :active="true"
+            @click="skillPress(primarySpells['q'].keybind)" />
+          <ReplaceInput v-model="primarySpells['q'].keybind"
+            @new-key="(key: string) => saveKeybind(key, primarySpells['q'].value, $refs.w)" />
         </div>
       </div>
       <div class="col flex justify-center items-center">
         <div class="primary-spells">
-          <InvokerSpell
-            class="full-width"
-            :spell="InvokerPrimarySpells['w']"
-            v-touch:tap="skillPress(InvokerPrimarySpells['w'].keybind)"
-            v-touch-class="'active'"
-          />
-          <ReplaceInput
-            ref="w"
-            v-model="InvokerPrimarySpells['w'].keybind"
-            @input="saveKeybind(InvokerPrimarySpells['w'].keybind, 'w', $refs.e)"
-          />
+          <InvokerSpell class="full-width cursor-pointer" :spell="primarySpells['w']"
+            @click="skillPress(primarySpells['w'].keybind)" />
+          <ReplaceInput ref="w" v-model="primarySpells['w'].keybind"
+            @new-key="(key: string) => saveKeybind(key, primarySpells['w'].value, $refs.e)" />
         </div>
       </div>
       <div class="col flex justify-center items-center">
         <div class="primary-spells">
-          <InvokerSpell
-            class="full-width"
-            :spell="InvokerPrimarySpells['e']"
-            v-touch:tap="skillPress(InvokerPrimarySpells['e'].keybind)"
-            @click="'xd'"
-            v-touch-class="'active'"
-          />
-          <ReplaceInput
-            ref="e"
-            v-model="InvokerPrimarySpells['e'].keybind"
-            @input="saveKeybind(InvokerPrimarySpells['e'].keybind, 'e', $refs.r)"
-          />
+          <InvokerSpell class="full-width cursor-pointer" :spell="primarySpells['e']"
+            @click="skillPress(primarySpells['e'].keybind)" />
+          <ReplaceInput ref="e" v-model="primarySpells['e'].keybind"
+            @new-key="(key: string) => saveKeybind(key, primarySpells['e'].value, $refs.r)" />
         </div>
       </div>
       <div class="col flex justify-center items-start">
@@ -63,17 +41,10 @@
       </div>
       <div class="col flex justify-center items-center">
         <div class="primary-spells">
-          <InvokerSpell
-            class="full-width"
-            :spell="InvokerPrimarySpells['r']"
-            v-touch:tap="skillPress(InvokerPrimarySpells['r'].keybind)"
-            v-touch-class="'active'"
-          />
-          <ReplaceInput
-            ref="r"
-            v-model="InvokerPrimarySpells['r'].keybind"
-            @input="saveKeybind(InvokerPrimarySpells['r'].keybind, 'r')"
-          />
+          <InvokerSpell class="full-width cursor-pointer" :spell="primarySpells['r']"
+            @click="skillPress(primarySpells['r'].keybind)" />
+          <ReplaceInput ref="r" v-model="primarySpells['r'].keybind"
+            @new-key="(key: string) => saveKeybind(key, primarySpells['r'].value)" />
         </div>
       </div>
     </div>
@@ -81,28 +52,32 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import { defineComponent } from 'vue'
 import InvokerSpell from 'components/invoker/InvokerSpell.vue';
 import ReplaceInput from 'components/ReplaceInput.vue';
 import {
   InvokerPrimarySpellType,
   CombinedSpellType,
-} from 'src/components/invoker/Spells.ts';
+} from 'src/components/invoker/Spells';
 
-export default (Vue as VueConstructor<
-  Vue & {
-    $refs: {
-      r: { focus: Function; blur: Function };
-    };
-  }
->).extend({
+export default defineComponent({
   name: 'InvokerSkillBar',
   props: {
-    InvokerPrimarySpells: {
+    invokerPrimarySpells: {
       type: Object as () => InvokerPrimarySpellType,
       required: true,
     },
     usedSpellStack: Array as () => CombinedSpellType[],
+  },
+  computed: {
+    primarySpells: {
+      get() {
+        return this.invokerPrimarySpells
+      },
+      set(value: InvokerPrimarySpellType) {
+        this.$emit('update:invokerPrimarySpells', value)
+      }
+    }
   },
   components: {
     InvokerSpell,
@@ -113,36 +88,25 @@ export default (Vue as VueConstructor<
   },
   methods: {
     saveKeybind(
-      value: string,
-      keybind: string,
-      next: { focus: Function } | undefined
+      newKeybind: string,
+      spellValue: keyof InvokerPrimarySpellType,
+      next: { focus: () => void } | undefined
     ) {
       const keybindings = this.$q.localStorage.getItem('keybindings') as {
         [index: string]: string;
       };
 
-      for (const key in keybindings) {
-        if (keybindings.hasOwnProperty(key)) {
-          const element = keybindings[key];
-          if (element === value && keybind !== key) {
-            keybindings[key] = '';
-            this.InvokerPrimarySpells[
-              key as keyof InvokerPrimarySpellType
-            ].keybind = '';
-          }
-        }
-      }
-
-      keybindings[keybind] = value;
+      keybindings[spellValue] = newKeybind;
       this.$q.localStorage.set('keybindings', keybindings);
+      this.primarySpells[spellValue].keybind = newKeybind
       if (next) {
         next.focus();
       } else {
-        this.$refs.r.blur();
+        (this.$refs.r as { blur: () => void }).blur();
       }
     },
     skillPress(k: string) {
-      return () => this.$emit('skill-press', { key: k });
+      this.$emit('skill-press', { key: k });
     },
   },
 });

@@ -1,58 +1,48 @@
 <template>
-  <q-input
-    ref="input"
-    input-class="text-center"
-    maxlength="1"
-    v-model="displayValue"
-    @focus="initFocusValues()"
-    @blur="restoreValue()"
-    @input="nextInput()"
-    dense
-  />
+  <q-input ref="input" input-class="text-center" maxlength="1" v-model="displayValue" @focus="initFocusValues()"
+    @blur="restoreValue()" @update:model-value="nextInput()" dense />
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import { defineComponent } from 'vue'
 
-export default (Vue as VueConstructor<
-  Vue & {
-    $refs: {
-      input: { focus: Function; blur: Function };
-    };
-  }
->).extend({
+interface Ref {
+  focus: () => void; blur: () => void,
+}
+export default defineComponent({
   name: 'ReplaceInput',
+  emits: ['new-key'],
   props: {
-    value: {
-      type: String,
-      required: true,
+    modelValue: {
+      type: String as () => string | null,
+      required: false,
     },
   },
   data() {
     return {
-      displayValue: this.value,
+      displayValue: this.modelValue,
     };
   },
   watch: {
-    value(newV) {
+    modelValue(newV) {
       this.displayValue = newV;
     },
   },
   methods: {
     restoreValue() {
-      this.displayValue = this.value;
+      this.displayValue = this.modelValue;
     },
     initFocusValues() {
       this.displayValue = '';
     },
     focus() {
-      this.$refs.input.focus();
+      (this.$refs.input as Ref).focus();
     },
     blur() {
-      this.$refs.input.blur();
+      (this.$refs.input as Ref).blur();
     },
     nextInput() {
-      this.$emit('input', this.displayValue);
+      this.$emit('new-key', this.displayValue);
     },
   },
 });

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 declare namespace NodeJS {
   interface ProcessEnv {
     NODE_ENV: string;
@@ -6,4 +8,5 @@ declare namespace NodeJS {
   }
 }
 
+// Get rid of all type errors in imported modules
 declare module '*';

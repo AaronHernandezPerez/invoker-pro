@@ -1,8 +1,6 @@
-# Invoker-pro
+# invoker-test (invoker-test)
 
-A game made to Improve my Invoker skills, made with Typescript Vue, Vuex and i18n
-
-It also has an android App using Electron
+A game made to Improve your Invoker skills, made with Typescript Vue3, Vuex, quasar and i18n
 
 <p align="center" >
   <img src="data/img1.PNG" alt="Room" />
@@ -12,16 +10,25 @@ It also has an android App using Electron
   <img src="data/img2.PNG" alt="Room" />
 </p>
 
-
 ## Install the dependencies
+
 ```bash
 yarn
 ```
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
+
 ```bash
 quasar dev
 quasar dev -m capacitor -T android
+```
+
+### Lint the files
+
+```bash
+yarn lint
+# or
+npm run lint
 ```
 
 Open emulator
@@ -29,15 +36,25 @@ Open emulator
 D:\Android-sdk\emulator\emulator.exe  -avd Pixel_3a_API_28 -netdelay none -netspeed full
 ```
 
+### Format the files
+
+```bash
+yarn format
+```
+
 ### Build the app for production
+
 ```bash
 quasar build
-quasar build -m capacitor -T android
 ```
+
+### Customize the configuration
+
+See [Configuring quasar.config.js](https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js).
 
 # Sign Capacitor android apk
 
-### Generates Key 
+### Generates Key
 pass: 123456
 ```bash
 keytool -genkey -v -keystore my-release-key.keystore -alias alias_name -keyalg RSA -keysize 2048 -validity 20000
@@ -81,19 +98,5 @@ Also install the following dependencies
 yarn add -D @capacitor/core
 ```
 
-## I18n keys
-```bash
-yarn vue-i18n-extract report -v "./src/**/*.?(js|vue)" -l "./src/i18n/*.?(js|json|yml|yaml)" -a
-```
-
 ### TODO
 steam integration
-meta tags
-splash is streched
-<!-- Find equivalent languages https://www.npmjs.com/package/country-language ? -->
-
-
-Rename cmd
-```
-FOR /R %x IN (*.png) DO ren "%x" splash.png
-```

@@ -13,45 +13,27 @@
           <div v-if="gameStatus !== UnstartedStatus">
             <h4 class="text-center q-mt-none">{{ $t('Invoke these spells') }}</h4>
             <div class="flex justify-around items-center" v-if="randomSpells">
-              <InvokerSpell
-                v-for="(spell, i) in randomSpells"
-                :key="spell.name"
-                class="random-spell"
-                :spell="spell"
-                :disabled="i !== randomSpellsIndex"
-              />
+              <InvokerSpell v-for="(spell, i) in randomSpells" :key="spell.name" class="random-spell" :data-myval="i"
+                :spell="spell" :inactive="i !== randomSpellsIndex" />
             </div>
-
-            <q-linear-progress
-              class="q-my-lg"
-              stripe
-              size="1.5em"
-              :value="spellTimePercentage"
-              v-if="gameMode === CompleteGameMode"
-            >
+            <q-linear-progress class="q-my-lg" size="1.5em" :value="spellTimePercentage" :animation-speed="200"
+              v-if="gameMode === CompleteGameMode">
               <div class="absolute-full flex flex-center">
-                <q-badge color="primary" :label="spellTime" />
+                <q-badge color="primary" :label="spellTime || ''" />
               </div>
             </q-linear-progress>
 
-            <h5
-              class="text-center flex justify-center items-center q-my-lg"
-              v-else-if="gameMode === TenGameMode"
-            >
+            <h5 class="text-center flex justify-center items-center q-my-lg" v-else-if="gameMode === TenGameMode">
               {{ $t('Your time') }}
-              <q-badge class="q-ml-md time-badge" color="primary">{{spellTime}}</q-badge>
+              <q-badge class="q-ml-md time-badge" color="primary">{{ spellTime }}</q-badge>
             </h5>
             <continue-game></continue-game>
           </div>
 
           <GameSelector v-else-if="gameStatus === UnstartedStatus" @mode-selected="startGame" />
 
-          <InvokerSkillBar
-            :InvokerPrimarySpells="InvokerPrimarySpells"
-            :usedSpellStack="usedSpellStack"
-            :gameStatus="gameStatus"
-            @skill-press="handleKeypress"
-          >
+          <InvokerSkillBar :invokerPrimarySpells="InvokerPrimarySpells" :usedSpellStack="usedSpellStack"
+            :gameStatus="gameStatus" @skill-press="handleKeypress">
             <div class="q-my-xl flex no-wrap justify-around items-center q-gutter-md">
               <div>
                 <InvokerSpell :spell="InvokerPrimarySpells[spellStack.data[0]]" border="round" />
@@ -78,9 +60,9 @@
       <q-card class="q-py-md">
         <q-card-section>
           <h5 class="text-center q-mt-none q-mb-md">{{ $t('Statistics') }}</h5>
-          <div>{{ $t('Played') }}: {{playedTotal}}</div>
-          <div>{{ $t('Points') }}: {{points}}</div>
-          <div>{{ $t('Failed') }}: {{playedFailed}}</div>
+          <div>{{ $t('Played') }}: {{ playedTotal }}</div>
+          <div>{{ $t('Points') }}: {{ points }}</div>
+          <div>{{ $t('Failed') }}: {{ playedFailed }}</div>
         </q-card-section>
       </q-card>
 
@@ -89,22 +71,22 @@
           <h5 class="text-center q-mt-none q-mb-md">{{ $t('Spells time') }}</h5>
           <div>
             {{ $t('Last') }}:
-            <AnimatedNumber :value="lastSpellTime" :formatValue="formatTime" :duration="300" />
+            <AnimatedNumber :value="lastSpellTime" :duration="duration" />
             <span style="margin-left: 4px">s</span>
           </div>
           <div>
             {{ $t('Average') }}:
-            <AnimatedNumber :value="averageSpellTime" :formatValue="formatTime" :duration="300" />
+            <AnimatedNumber :value="averageSpellTime" :duration="duration" />
             <span style="margin-left: 4px">s</span>
           </div>
           <div>
             {{ $t('Fastest') }}:
-            <AnimatedNumber :value="fastestSpellTime" :formatValue="formatTime" :duration="300" />
+            <AnimatedNumber :value="fastestSpellTime" :duration="duration" />
             <span style="margin-left: 4px">s</span>
           </div>
           <div>
             {{ $t('Slowest') }}:
-            <AnimatedNumber :value="slowestSpellTime" :formatValue="formatTime" :duration="300" />
+            <AnimatedNumber :value="slowestSpellTime" :duration="duration" />
             <span style="margin-left: 4px">s</span>
           </div>
         </q-card-section>
@@ -119,15 +101,8 @@
           <div class="flex items-center">
             {{ $t('Sound volume') }}
             <div class="flex-grow q-px-sm">
-              <q-slider
-                class="q-ml-sm"
-                v-model="audioVolume"
-                :max="100"
-                :min="0"
-                :step="5"
-                label
-                :label-value="audioVolume + '%'"
-              />
+              <q-slider class="q-ml-sm" v-model="audioVolume" :max="100" :min="0" :step="5" label
+                :label-value="audioVolume + '%'" />
             </div>
           </div>
         </q-card-section>
@@ -137,19 +112,18 @@
 </template>
 
 <script lang="ts">
-/* eslint-disable @typescript-eslint/unbound-method */
-import Vue, { VueConstructor } from 'vue';
+import { defineComponent } from 'vue'
+import Timer from 'easytimer';
 import InvokerSpell from 'components/invoker/InvokerSpell.vue';
 import InvokerGuide from 'components/invoker/InvokerGuide.vue';
 import InvokerSkillBar from 'components/invoker/InvokerSkillBar.vue';
-import GameSelector from 'src/components/invoker/GameSelector.vue';
-import AnimatedNumber from 'animated-number-vue';
-import ContinueGame from 'src/components/invoker/ContinueGame.vue';
+import GameSelector from 'components/invoker/GameSelector.vue';
+import ContinueGame from 'components/invoker/ContinueGame.vue';
+import AnimatedNumber from 'components/AnimatedNumber.vue';
 import Stack from 'src/classes/Stack';
-import Timer from 'easytimer';
 
 import { mapState, mapActions } from 'vuex';
-import { shuffle, vibrate } from 'src/services/AuxFunctions.ts';
+import { shuffle, vibrate } from 'src/services/AuxFunctions';
 import {
   CompleteGameMode,
   TenGameMode,
@@ -157,7 +131,7 @@ import {
   UnstartedStatus,
   StartedStatus,
   FinishedStatus,
-} from 'src/components/invoker/GameModes.ts';
+} from 'components/invoker/GameModes';
 
 import {
   InvokerPrimarySpellType,
@@ -168,7 +142,7 @@ import {
   InvokerCombinedSpellType,
   InvokerSpellsTime,
 } from 'components/invoker/Spells';
-// Settings neccesary localstorage data
+
 import { LocalStorage } from 'quasar';
 
 type KeybindsType = {
@@ -187,13 +161,7 @@ if (!LocalStorage.getItem('keybindings')) {
   });
 }
 
-export default (Vue as VueConstructor<
-  Vue & {
-    $refs: {
-      scrollTarget: HTMLScriptElement;
-    };
-  }
->).extend({
+export default defineComponent({
   name: 'InvokerGame',
   components: {
     InvokerSpell,
@@ -245,7 +213,7 @@ export default (Vue as VueConstructor<
       spellTime: null as null | string,
       spellTimePercentage: 1 as number,
       // Player options
-      audioVolume: parseInt(localStorage.audioVolume) || 100,
+      audioVolume: parseInt(localStorage.audioVolume) || 50,
       vibration,
       // Game status
       UnstartedStatus,
@@ -260,6 +228,7 @@ export default (Vue as VueConstructor<
         oof: require('src/assets/audio/oof.mp3'),
         // fail:  require('src/assets/audio/fail.mp3')
       },
+      duration: 300
     };
   },
   computed: {
@@ -410,6 +379,7 @@ export default (Vue as VueConstructor<
     },
     handleKeypress(e: { key: string }) {
       if (this.gameStatus !== StartedStatus) {
+        debugger
         return;
       }
 
@@ -537,10 +507,6 @@ export default (Vue as VueConstructor<
       this.usedSpellStack = [];
       this.spellStack.clear();
     },
-    formatTime(t: number): string {
-      const formatedT = t.toFixed(3);
-      return formatedT;
-    },
   },
   watch: {
     gameStatus(newV) {
@@ -557,7 +523,7 @@ export default (Vue as VueConstructor<
           break;
       }
 
-      this.$refs.scrollTarget.scrollIntoView({ behavior: 'smooth' });
+      (this.$refs.scrollTarget as { scrollIntoView: (arg: { behavior: string }) => void }).scrollIntoView({ behavior: 'smooth' });
     },
     audioVolume(newV) {
       localStorage.audioVolume = newV;
@@ -569,7 +535,7 @@ export default (Vue as VueConstructor<
   created() {
     window.addEventListener('keydown', this.handleKeypress);
   },
-  destroyed() {
+  unmounted() {
     window.removeEventListener('keydown', this.handleKeypress);
     this.timer.stop();
     this.resetGame();

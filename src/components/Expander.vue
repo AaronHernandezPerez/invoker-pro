@@ -5,30 +5,25 @@
 </template>
 
 <script lang="ts">
-import Vue, { VueConstructor } from 'vue';
+import { defineComponent } from 'vue';
 
 const Delay = 300;
 
-export default (Vue as VueConstructor<
-  Vue & {
-    $refs: {
-      expander: HTMLDivElement;
-    };
-  }
->).extend({
+type ExpanderRef = HTMLDivElement
+export default defineComponent({
   name: 'Expander',
   props: {
-    value: Boolean as () => boolean, //true is expanded
+    modelValue: Boolean, //true is expanded
   },
   data() {
     return {
-      expanded: this.value,
+      expanded: this.modelValue,
       previousHeight: '0px',
       timeout: null as ReturnType<typeof setTimeout> | null,
     };
   },
   watch: {
-    value(newV) {
+    modelValue(newV) {
       if (newV === false) {
         this.collapse(newV);
       } else if (newV === true) {
@@ -40,18 +35,18 @@ export default (Vue as VueConstructor<
     expand(val: boolean) {
       this.clearTimeout();
       this.expanded = val;
-      this.$refs.expander.style.height = this.previousHeight;
+      (this.$refs.expander as ExpanderRef).style.height = this.previousHeight;
       this.timeout = setTimeout(() => {
-        this.$refs.expander.style.height = '';
+        (this.$refs.expander as ExpanderRef).style.height = '';
       }, Delay);
     },
     collapse(val: boolean) {
       this.clearTimeout();
-      this.previousHeight = this.$refs.expander.scrollHeight + 'px';
-      this.$refs.expander.style.height = this.previousHeight;
+      this.previousHeight = (this.$refs.expander as ExpanderRef).scrollHeight + 'px';
+      (this.$refs.expander as ExpanderRef).style.height = this.previousHeight;
 
       setTimeout(() => {
-        this.$refs.expander.style.height = '0px';
+        (this.$refs.expander as ExpanderRef).style.height = '0px';
         this.expanded = val;
       }, 0);
     },

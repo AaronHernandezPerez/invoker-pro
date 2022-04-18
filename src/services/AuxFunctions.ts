@@ -1,6 +1,6 @@
-import { Platform } from 'quasar'
-import { Plugins, HapticsImpactStyle } from '@capacitor/core'
-const { Haptics } = Plugins
+// import { Platform } from 'quasar';
+// import { Plugins, HapticsImpactStyle } from '@capacitor/core'
+// const { Haptics } = Plugins;
 /**
  * Knuth-Fisher-Yates shuffle js
  *
@@ -29,13 +29,14 @@ export function shuffle<T>(array: Array<T>): Array<T> {
   return array;
 }
 
-
 export function vibrate() {
   try {
-    if (Platform.is.capacitor) {
-      Haptics.impact({ style: HapticsImpactStyle.Heavy })
-    } else {
-      navigator.vibrate(15);
-    }
-  } catch (error) { }
+    // if (Platform.is.capacitor) {
+    // Haptics.impact({ style: HapticsImpactStyle.Heavy })
+    // } else {
+    navigator.vibrate(15);
+    // }
+  } catch (error) {
+    console.error('Error trying to vibrate', error);
+  }
 }

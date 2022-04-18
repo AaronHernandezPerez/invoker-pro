@@ -1,14 +1,15 @@
 <template>
-  <img class="inv-icon" :class="[border, clickeable === true ? 'clickeable' : '' ]" :src="icon" />
+  <img class="inv-icon" :class="[border, clickeable === true ? 'clickeable' : '', inactive ? 'inactive' : '']"
+    :src="icon" />
 </template>
 
 <script>
-import Vue from 'vue';
-import { StartedStatus } from 'src/components/invoker/GameModes.ts';
+import { defineComponent } from 'vue';
+import { StartedStatus } from 'src/components/invoker/GameModes';
 import NoIcon from 'src/assets/icons/invoker/No_icon.png';
 import { mapState } from 'vuex';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'InvokerSpell',
   props: {
     spell: {
@@ -22,6 +23,10 @@ export default Vue.extend({
       type: String,
       default: 'square',
     },
+    inactive: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     ...mapState('InvokerGame', ['gameStatus']),
@@ -63,6 +68,7 @@ export default Vue.extend({
 // Topleft white
 $light: rgba(255, 255, 255, 0.3);
 $dark: rgba(255, 255, 255, 0.1);
+
 img.inv-icon {
   width: 100%;
   transition: opacity 0.25s ease;
@@ -94,5 +100,10 @@ img.inv-icon {
 .round {
   border-radius: 100%;
   border: 6px ridge $dark;
+}
+
+.inactive {
+  opacity: 0.5;
+  filter: blur(1px);
 }
 </style>

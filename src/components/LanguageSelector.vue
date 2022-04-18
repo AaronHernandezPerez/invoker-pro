@@ -1,27 +1,15 @@
 <template>
-  <q-select
-    class="lang-selector"
-    v-model="selectedCountry"
-    :options="countries"
-    color="primary"
-    dense
-    options-selected-class="text-deep-orange"
-  >
+  <q-select class="lang-selector" v-model="selectedCountry" :options="countries" color="primary" dense
+    options-selected-class="text-deep-orange">
     <template v-slot:selected>
       <q-item dense square>
-        <q-item-section avatar>
-          <country-flag :country="selectedCountry.flag" />
-        </q-item-section>
         <q-item-section>
           <q-item-label v-html="selectedCountry.label" />
         </q-item-section>
       </q-item>
     </template>
     <template v-slot:option="scope">
-      <q-item v-bind="scope.itemProps" v-on="scope.itemEvents">
-        <q-item-section avatar>
-          <country-flag :country="scope.opt.flag" />
-        </q-item-section>
+      <q-item v-bind="scope.itemProps">
         <q-item-section>
           <q-item-label v-html="scope.opt.label" />
         </q-item-section>
@@ -31,26 +19,23 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
-import { RawLocation } from 'vue-router';
+import { defineComponent } from 'vue';
+import { RouteLocationRaw } from 'vue-router';
 
 import { changeLanguage, defaultLanguage } from 'boot/i18n';
-import CountryFlag from 'vue-country-flag';
 
-export default Vue.extend({
+export default defineComponent({
   name: 'LanguageSelector',
   components: {
-    CountryFlag
   },
   data() {
     interface CountryType {
       value: string;
       label: string;
-      flag: string;
     }
     const countries: Array<CountryType> = [
-      { value: 'en', label: 'English', flag: 'gb' },
-      { value: 'es', label: 'Español', flag: 'es' }
+      { value: 'en', label: 'English' },
+      { value: 'es', label: 'Español' }
     ];
     const selectedCountry = countries.find(
       (e: CountryType) => e.value === this.$i18n.locale
@@ -71,7 +56,7 @@ export default Vue.extend({
       }
 
       if (route.name) {
-        const newRoute: RawLocation = {
+        const newRoute: RouteLocationRaw = {
           name: route.name,
           params: { lang: lang }
         };
